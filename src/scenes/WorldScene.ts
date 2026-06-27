@@ -303,7 +303,15 @@ export class WorldScene extends Phaser.Scene implements IWorld {
     // kister (spec kap. 26-28)
     for (const c of this.zone.chests) {
       if (this.profile.openedChests.includes(c.id)) continue;
+      // Skjult skatt (spec kap. 21): kister som krever find_treasure er usynlige
+      // til en skatte-snuser (cindertail) er i laget, og dukker da opp med glitter.
+      const hidden = c.requires === 'find_treasure';
+      if (hidden && !ExplorationSystem.hasAbility(this.profile, 'find_treasure')) continue;
       const sprite = this.add.sprite(c.x, c.y, 'chest').setDepth(6).setScale(1.5);
+      if (hidden) {
+        this.tweens.add({ targets: sprite, alpha: { from: 0.6, to: 1 }, duration: 700, yoyo: true, repeat: -1, ease: 'Sine.InOut' });
+        this.recruitEffect(c.x, c.y); // gjenbruk glitter-effekten som «funnet!»-blink
+      }
       this.interactables.push({ sprite, kind: 'chest', data: c });
     }
     // hindringer som krever utforskningsevner (spec kap. 21, 26)

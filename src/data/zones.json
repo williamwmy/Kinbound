@@ -1192,6 +1192,14 @@
         "loot": "emberplate",
         "lootKind": "armor",
         "requires": "dig_tunnels"
+      },
+      {
+        "id": "ch_volcano_hidden",
+        "x": 760,
+        "y": 920,
+        "loot": "heart_container",
+        "lootKind": "item",
+        "requires": "find_treasure"
       }
     ],
     "obstacles": [],
@@ -1378,6 +1386,14 @@
         "loot": "sunfire_staff",
         "lootKind": "weapon",
         "requires": "illuminate_dark"
+      },
+      {
+        "id": "ch_snow_hidden",
+        "x": 820,
+        "y": 940,
+        "loot": "strength_brew",
+        "lootKind": "item",
+        "requires": "find_treasure"
       }
     ],
     "obstacles": [
@@ -1568,6 +1584,14 @@
         "loot": "heart_container",
         "lootKind": "item",
         "requires": "charge_runes"
+      },
+      {
+        "id": "ch_ruins_hidden",
+        "x": 700,
+        "y": 900,
+        "loot": "monster_tonic",
+        "lootKind": "item",
+        "requires": "find_treasure"
       }
     ],
     "obstacles": [
