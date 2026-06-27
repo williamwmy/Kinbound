@@ -24,20 +24,24 @@ export class CharacterCreationScene extends Phaser.Scene {
     this.lang = Localization.getLanguage();
     this.name = t('creation.default_name');
 
-    const { width } = this.scale;
+    const { width, height } = this.scale;
     this.cameras.main.setBackgroundColor('#0b0e14');
-    heading(this, width / 2, 34, t('creation.title'));
+    heading(this, width / 2, height * 0.063, t('creation.title'));
 
     // forhåndsvisning - bygg teksturen først, opprett bildet, deretter oppdater.
     // (this.preview kan peke på et ødelagt bilde etter scene.restart - nullstilles.)
     this.preview = undefined;
     this.refreshPreview();
-    this.preview = this.add.image(width / 2, 96, 'player_preview').setScale(2.4).setOrigin(0.5);
+    this.preview = this.add
+      .image(width / 2, height * 0.18, 'player_preview')
+      .setScale(2.4)
+      .setOrigin(0.5);
 
-    // Kompakt layout som får plass innenfor 540px skjermhøyde.
+    // Høyde-relativ layout som får plass på enhver oppløsning (mobil = 405px,
+    // PC = 540px) uten at Start-knappen havner utenfor skjermen.
     const leftX = width / 2 - 200;
-    let y = 164;
-    const row = 44;
+    let y = height * 0.305;
+    const row = height * 0.082;
 
     // navn (tapp for å skrive)
     label(this, leftX, y - 12, t('creation.name'));
@@ -83,7 +87,7 @@ export class CharacterCreationScene extends Phaser.Scene {
       },
       { width: 100, height: 40, fontSize: 18 },
     );
-    y += row + 10;
+    y += row + height * 0.05;
 
     new Button(this, width / 2 - 120, y, t('common.back'), () => this.scene.start('MainMenu'), {
       width: 200,

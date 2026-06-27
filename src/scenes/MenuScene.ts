@@ -184,19 +184,24 @@ export class MenuScene extends Phaser.Scene {
       settings: t('ui.settings'),
       profile: t('ui.profile'),
     };
+    // Fanene sentreres og tilpasses faktisk bredde, så ingen fane klippes av
+    // panelkanten på lavere oppløsning (mobil = 720px, PC = 960px).
     const { width } = this.scale;
-    const startX = width / 2 - 350;
+    const n = tabs.length;
+    const spacing = Math.min(118, (width - 24) / n);
+    const tabW = Math.min(110, spacing - 6);
+    const startX = width / 2 - (spacing * (n - 1)) / 2;
     tabs.forEach((tab, i) => {
       new Button(
         this,
-        startX + i * 118,
+        startX + i * spacing,
         96,
         labels[tab],
         () => {
           this.tab = tab;
           this.renderTab();
         },
-        { width: 110, height: 40, fontSize: 15, bg: this.tab === tab ? 0x3a4a70 : 0x222a3c },
+        { width: tabW, height: 40, fontSize: 15, bg: this.tab === tab ? 0x3a4a70 : 0x222a3c },
       );
     });
   }

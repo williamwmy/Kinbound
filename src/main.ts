@@ -16,6 +16,15 @@ import { GameOverScene } from './scenes/GameOverScene';
 Settings.load();
 AudioManager.init();
 
+// På berøringsenheter (mobil) renderer vi på en lavere intern oppløsning slik at
+// FIT skalerer ALT opp (figurer, skrift, UI) ~1,33× = mer lesbart på liten
+// skjerm (spec kap. 31). PC beholder full oppløsning med mer synlig verden.
+const isTouch =
+  typeof window !== 'undefined' &&
+  (('ontouchstart' in window) || (navigator.maxTouchPoints ?? 0) > 0);
+const renderWidth = isTouch ? 720 : GAME.width;
+const renderHeight = isTouch ? 405 : GAME.height;
+
 // Phaser-spillkonfigurasjon. Skalerer for å fylle skjermen på mobil og PC.
 const game = new Phaser.Game({
   type: Phaser.AUTO,
@@ -26,8 +35,8 @@ const game = new Phaser.Game({
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
-    width: GAME.width,
-    height: GAME.height,
+    width: renderWidth,
+    height: renderHeight,
   },
   physics: {
     default: 'arcade',
