@@ -1,0 +1,567 @@
+[
+  {
+    "id": "emberpup",
+    "nameKey": "monster.emberpup.name",
+    "descKey": "monster.emberpup.desc",
+    "role": "bruiser",
+    "element": "fire",
+    "resourceSystem": "cooldown",
+    "explorationAbility": "light_torches",
+    "evolveLevel": 5,
+    "xpReward": 12,
+    "special": {
+      "nameKey": "ability.ember_burst.name",
+      "descKey": "ability.ember_burst.desc",
+      "cost": 0,
+      "cooldownMs": 6000,
+      "kind": "aoe_damage",
+      "power": 16,
+      "radius": 70
+    },
+    "forms": [
+      {
+        "sprite": "mon_emberpup_0",
+        "nameKey": "monster.emberpup.name",
+        "stats": {
+          "maxHp": 42,
+          "damage": 12,
+          "attackRange": 34,
+          "attackCooldown": 800,
+          "moveSpeed": 92,
+          "armor": 3
+        }
+      },
+      {
+        "sprite": "mon_emberpup_1",
+        "nameKey": "monster.infernhound.name",
+        "stats": {
+          "maxHp": 70,
+          "damage": 20,
+          "attackRange": 38,
+          "attackCooldown": 720,
+          "moveSpeed": 100,
+          "armor": 5
+        }
+      }
+    ]
+  },
+  {
+    "id": "tidefin",
+    "nameKey": "monster.tidefin.name",
+    "descKey": "monster.tidefin.desc",
+    "role": "tank",
+    "element": "water",
+    "resourceSystem": "mana",
+    "explorationAbility": "jump_water",
+    "evolveLevel": 6,
+    "xpReward": 14,
+    "special": {
+      "nameKey": "ability.tidal_taunt.name",
+      "descKey": "ability.tidal_taunt.desc",
+      "cost": 10,
+      "cooldownMs": 8000,
+      "kind": "taunt",
+      "power": 0,
+      "radius": 160
+    },
+    "forms": [
+      {
+        "sprite": "mon_tidefin_0",
+        "nameKey": "monster.tidefin.name",
+        "stats": {
+          "maxHp": 84,
+          "damage": 5,
+          "attackRange": 36,
+          "attackCooldown": 1200,
+          "moveSpeed": 70,
+          "armor": 8,
+          "maxMana": 30
+        }
+      },
+      {
+        "sprite": "mon_tidefin_1",
+        "nameKey": "monster.tidemaw.name",
+        "stats": {
+          "maxHp": 132,
+          "damage": 8,
+          "attackRange": 40,
+          "attackCooldown": 1100,
+          "moveSpeed": 76,
+          "armor": 11,
+          "maxMana": 40
+        }
+      }
+    ]
+  },
+  {
+    "id": "stoneback",
+    "nameKey": "monster.stoneback.name",
+    "descKey": "monster.stoneback.desc",
+    "role": "tank",
+    "element": "earth",
+    "resourceSystem": "cooldown",
+    "explorationAbility": "smash_rocks",
+    "evolveLevel": 6,
+    "xpReward": 14,
+    "special": {
+      "nameKey": "ability.stone_shield.name",
+      "descKey": "ability.stone_shield.desc",
+      "cost": 0,
+      "cooldownMs": 9000,
+      "kind": "shield_self",
+      "power": 30,
+      "radius": 0
+    },
+    "forms": [
+      {
+        "sprite": "mon_stoneback_0",
+        "nameKey": "monster.stoneback.name",
+        "stats": {
+          "maxHp": 90,
+          "damage": 6,
+          "attackRange": 34,
+          "attackCooldown": 1300,
+          "moveSpeed": 64,
+          "armor": 10
+        }
+      },
+      {
+        "sprite": "mon_stoneback_1",
+        "nameKey": "monster.boulderax.name",
+        "stats": {
+          "maxHp": 140,
+          "damage": 11,
+          "attackRange": 38,
+          "attackCooldown": 1200,
+          "moveSpeed": 70,
+          "armor": 14
+        }
+      }
+    ]
+  },
+  {
+    "id": "leafling",
+    "nameKey": "monster.leafling.name",
+    "descKey": "monster.leafling.desc",
+    "role": "healer",
+    "element": "nature",
+    "resourceSystem": "mana",
+    "explorationAbility": "grow_vines",
+    "evolveLevel": 5,
+    "xpReward": 12,
+    "special": {
+      "nameKey": "ability.bloom_heal.name",
+      "descKey": "ability.bloom_heal.desc",
+      "cost": 12,
+      "cooldownMs": 5000,
+      "kind": "heal_ally",
+      "power": 24,
+      "radius": 180
+    },
+    "forms": [
+      {
+        "sprite": "mon_leafling_0",
+        "nameKey": "monster.leafling.name",
+        "stats": {
+          "maxHp": 34,
+          "damage": 5,
+          "attackRange": 150,
+          "attackCooldown": 1200,
+          "moveSpeed": 86,
+          "armor": 2,
+          "maxMana": 40
+        }
+      },
+      {
+        "sprite": "mon_leafling_1",
+        "nameKey": "monster.thornbeast.name",
+        "stats": {
+          "maxHp": 56,
+          "damage": 9,
+          "attackRange": 160,
+          "attackCooldown": 1100,
+          "moveSpeed": 90,
+          "armor": 4,
+          "maxMana": 55
+        }
+      }
+    ]
+  },
+  {
+    "id": "gustling",
+    "nameKey": "monster.gustling.name",
+    "descKey": "monster.gustling.desc",
+    "role": "ranged",
+    "element": "wind",
+    "resourceSystem": "cooldown",
+    "explorationAbility": "build_bridges",
+    "evolveLevel": 5,
+    "xpReward": 12,
+    "special": {
+      "nameKey": "ability.gale_slow.name",
+      "descKey": "ability.gale_slow.desc",
+      "cost": 0,
+      "cooldownMs": 7000,
+      "kind": "debuff_enemy",
+      "power": 40,
+      "radius": 150
+    },
+    "forms": [
+      {
+        "sprite": "mon_gustling_0",
+        "nameKey": "monster.gustling.name",
+        "stats": {
+          "maxHp": 30,
+          "damage": 10,
+          "attackRange": 200,
+          "attackCooldown": 900,
+          "moveSpeed": 96,
+          "armor": 1
+        }
+      },
+      {
+        "sprite": "mon_gustling_1",
+        "nameKey": "monster.stormwing.name",
+        "stats": {
+          "maxHp": 50,
+          "damage": 16,
+          "attackRange": 220,
+          "attackCooldown": 820,
+          "moveSpeed": 104,
+          "armor": 2
+        }
+      }
+    ]
+  },
+  {
+    "id": "sparkit",
+    "nameKey": "monster.sparkit.name",
+    "descKey": "monster.sparkit.desc",
+    "role": "mage",
+    "element": "lightning",
+    "resourceSystem": "mana",
+    "explorationAbility": "activate_machines",
+    "evolveLevel": 6,
+    "xpReward": 15,
+    "special": {
+      "nameKey": "ability.chain_bolt.name",
+      "descKey": "ability.chain_bolt.desc",
+      "cost": 14,
+      "cooldownMs": 4000,
+      "kind": "aoe_damage",
+      "power": 22,
+      "radius": 120
+    },
+    "forms": [
+      {
+        "sprite": "mon_sparkit_0",
+        "nameKey": "monster.sparkit.name",
+        "stats": {
+          "maxHp": 28,
+          "damage": 14,
+          "attackRange": 180,
+          "attackCooldown": 1400,
+          "moveSpeed": 82,
+          "armor": 1,
+          "maxMana": 36
+        }
+      },
+      {
+        "sprite": "mon_sparkit_1",
+        "nameKey": "monster.voltbeast.name",
+        "stats": {
+          "maxHp": 46,
+          "damage": 22,
+          "attackRange": 200,
+          "attackCooldown": 1250,
+          "moveSpeed": 88,
+          "armor": 2,
+          "maxMana": 50
+        }
+      }
+    ]
+  },
+  {
+    "id": "lumenmoth",
+    "nameKey": "monster.lumenmoth.name",
+    "descKey": "monster.lumenmoth.desc",
+    "role": "support",
+    "element": "light",
+    "resourceSystem": "mana",
+    "explorationAbility": "illuminate_dark",
+    "evolveLevel": 5,
+    "xpReward": 12,
+    "special": {
+      "nameKey": "ability.radiant_ward.name",
+      "descKey": "ability.radiant_ward.desc",
+      "cost": 12,
+      "cooldownMs": 7000,
+      "kind": "buff_ally",
+      "power": 30,
+      "radius": 180
+    },
+    "forms": [
+      {
+        "sprite": "mon_lumenmoth_0",
+        "nameKey": "monster.lumenmoth.name",
+        "stats": {
+          "maxHp": 32,
+          "damage": 6,
+          "attackRange": 140,
+          "attackCooldown": 1200,
+          "moveSpeed": 88,
+          "armor": 2,
+          "maxMana": 42
+        }
+      },
+      {
+        "sprite": "mon_lumenmoth_1",
+        "nameKey": "monster.radiowl.name",
+        "stats": {
+          "maxHp": 52,
+          "damage": 10,
+          "attackRange": 150,
+          "attackCooldown": 1100,
+          "moveSpeed": 92,
+          "armor": 3,
+          "maxMana": 56
+        }
+      }
+    ]
+  },
+  {
+    "id": "shadepup",
+    "nameKey": "monster.shadepup.name",
+    "descKey": "monster.shadepup.desc",
+    "role": "bruiser",
+    "element": "dark",
+    "resourceSystem": "cooldown",
+    "explorationAbility": "reveal_walls",
+    "evolveLevel": 5,
+    "xpReward": 13,
+    "special": {
+      "nameKey": "ability.shadow_curse.name",
+      "descKey": "ability.shadow_curse.desc",
+      "cost": 0,
+      "cooldownMs": 6500,
+      "kind": "debuff_enemy",
+      "power": 25,
+      "radius": 100
+    },
+    "forms": [
+      {
+        "sprite": "mon_shadepup_0",
+        "nameKey": "monster.shadepup.name",
+        "stats": {
+          "maxHp": 38,
+          "damage": 13,
+          "attackRange": 32,
+          "attackCooldown": 760,
+          "moveSpeed": 94,
+          "armor": 2
+        }
+      },
+      {
+        "sprite": "mon_shadepup_1",
+        "nameKey": "monster.nightmaw.name",
+        "stats": {
+          "maxHp": 62,
+          "damage": 21,
+          "attackRange": 36,
+          "attackCooldown": 700,
+          "moveSpeed": 102,
+          "armor": 4
+        }
+      }
+    ]
+  },
+  {
+    "id": "mossback",
+    "nameKey": "monster.mossback.name",
+    "descKey": "monster.mossback.desc",
+    "role": "bruiser",
+    "element": "earth",
+    "resourceSystem": "cooldown",
+    "explorationAbility": "dig_tunnels",
+    "evolveLevel": 6,
+    "xpReward": 13,
+    "special": {
+      "nameKey": "ability.quake_stomp.name",
+      "descKey": "ability.quake_stomp.desc",
+      "cost": 0,
+      "cooldownMs": 7000,
+      "kind": "aoe_damage",
+      "power": 18,
+      "radius": 90
+    },
+    "forms": [
+      {
+        "sprite": "mon_mossback_0",
+        "nameKey": "monster.mossback.name",
+        "stats": {
+          "maxHp": 46,
+          "damage": 11,
+          "attackRange": 34,
+          "attackCooldown": 900,
+          "moveSpeed": 80,
+          "armor": 4
+        }
+      },
+      {
+        "sprite": "mon_mossback_1",
+        "nameKey": "monster.terrabrute.name",
+        "stats": {
+          "maxHp": 76,
+          "damage": 18,
+          "attackRange": 38,
+          "attackCooldown": 820,
+          "moveSpeed": 86,
+          "armor": 7
+        }
+      }
+    ]
+  },
+  {
+    "id": "frostkit",
+    "nameKey": "monster.frostkit.name",
+    "descKey": "monster.frostkit.desc",
+    "role": "mage",
+    "element": "water",
+    "resourceSystem": "mana",
+    "explorationAbility": "freeze_water",
+    "evolveLevel": 6,
+    "xpReward": 15,
+    "special": {
+      "nameKey": "ability.frost_nova.name",
+      "descKey": "ability.frost_nova.desc",
+      "cost": 14,
+      "cooldownMs": 4500,
+      "kind": "aoe_damage",
+      "power": 20,
+      "radius": 110
+    },
+    "forms": [
+      {
+        "sprite": "mon_frostkit_0",
+        "nameKey": "monster.frostkit.name",
+        "stats": {
+          "maxHp": 28,
+          "damage": 13,
+          "attackRange": 175,
+          "attackCooldown": 1400,
+          "moveSpeed": 82,
+          "armor": 1,
+          "maxMana": 36
+        }
+      },
+      {
+        "sprite": "mon_frostkit_1",
+        "nameKey": "monster.glacian.name",
+        "stats": {
+          "maxHp": 46,
+          "damage": 20,
+          "attackRange": 195,
+          "attackCooldown": 1250,
+          "moveSpeed": 88,
+          "armor": 2,
+          "maxMana": 50
+        }
+      }
+    ]
+  },
+  {
+    "id": "cindertail",
+    "nameKey": "monster.cindertail.name",
+    "descKey": "monster.cindertail.desc",
+    "role": "ranged",
+    "element": "fire",
+    "resourceSystem": "cooldown",
+    "explorationAbility": "find_treasure",
+    "evolveLevel": 5,
+    "xpReward": 13,
+    "special": {
+      "nameKey": "ability.flare_shot.name",
+      "descKey": "ability.flare_shot.desc",
+      "cost": 0,
+      "cooldownMs": 6000,
+      "kind": "aoe_damage",
+      "power": 19,
+      "radius": 80
+    },
+    "forms": [
+      {
+        "sprite": "mon_cindertail_0",
+        "nameKey": "monster.cindertail.name",
+        "stats": {
+          "maxHp": 30,
+          "damage": 11,
+          "attackRange": 200,
+          "attackCooldown": 950,
+          "moveSpeed": 94,
+          "armor": 1
+        }
+      },
+      {
+        "sprite": "mon_cindertail_1",
+        "nameKey": "monster.magmaw.name",
+        "stats": {
+          "maxHp": 50,
+          "damage": 17,
+          "attackRange": 215,
+          "attackCooldown": 860,
+          "moveSpeed": 100,
+          "armor": 2
+        }
+      }
+    ]
+  },
+  {
+    "id": "auraling",
+    "nameKey": "monster.auraling.name",
+    "descKey": "monster.auraling.desc",
+    "role": "healer",
+    "element": "light",
+    "resourceSystem": "mana",
+    "explorationAbility": "charge_runes",
+    "evolveLevel": 6,
+    "xpReward": 16,
+    "revivePassive": true,
+    "special": {
+      "nameKey": "ability.sanctuary.name",
+      "descKey": "ability.sanctuary.desc",
+      "cost": 16,
+      "cooldownMs": 6000,
+      "kind": "heal_ally",
+      "power": 30,
+      "radius": 200
+    },
+    "forms": [
+      {
+        "sprite": "mon_auraling_0",
+        "nameKey": "monster.auraling.name",
+        "stats": {
+          "maxHp": 36,
+          "damage": 6,
+          "attackRange": 155,
+          "attackCooldown": 1200,
+          "moveSpeed": 84,
+          "armor": 2,
+          "maxMana": 46
+        }
+      },
+      {
+        "sprite": "mon_auraling_1",
+        "nameKey": "monster.seraphyx.name",
+        "stats": {
+          "maxHp": 60,
+          "damage": 10,
+          "attackRange": 170,
+          "attackCooldown": 1100,
+          "moveSpeed": 90,
+          "armor": 4,
+          "maxMana": 64
+        }
+      }
+    ]
+  }
+]

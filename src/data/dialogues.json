@@ -1,0 +1,68 @@
+[
+  {
+    "id": "dlg_shopkeeper",
+    "lines": [
+      {
+        "textKey": "dialogue.shopkeeper.1"
+      },
+      {
+        "textKey": "dialogue.shopkeeper.2"
+      }
+    ]
+  },
+  {
+    "id": "dlg_healer",
+    "lines": [
+      {
+        "textKey": "dialogue.healer.1"
+      }
+    ]
+  },
+  {
+    "id": "dlg_smith",
+    "lines": [
+      {
+        "textKey": "dialogue.smith.1"
+      },
+      {
+        "textKey": "dialogue.smith.2"
+      }
+    ]
+  },
+  {
+    "id": "dlg_elder",
+    "lines": [
+      {
+        "textKey": "dialogue.elder.1"
+      },
+      {
+        "textKey": "dialogue.elder.2"
+      },
+      {
+        "textKey": "dialogue.elder.3"
+      }
+    ]
+  },
+  {
+    "id": "dlg_villager",
+    "lines": [
+      {
+        "textKey": "dialogue.villager.1"
+      }
+    ]
+  },
+  {
+    "id": "dlg_forager",
+    "lines": [
+      {
+        "textKey": "dialogue.forager.1"
+      },
+      {
+        "textKey": "dialogue.forager.2"
+      },
+      {
+        "textKey": "dialogue.forager.3"
+      }
+    ]
+  }
+]

@@ -1,0 +1,20 @@
+{
+  "name": "kinbound",
+  "version": "1.0.0",
+  "description": "Kinbound - et action-RPG sett ovenfra og ned hvor du rekrutterer monstre som følgesvenner.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "validate": "node scripts/validate-data.mjs",
+    "build": "node scripts/validate-data.mjs && tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "phaser": "^4.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5",
+    "vite": "^5.2.0"
+  }
+}

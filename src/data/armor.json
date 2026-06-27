@@ -1,0 +1,115 @@
+[
+  {
+    "id": "cloth_tunic",
+    "nameKey": "armor.cloth_tunic.name",
+    "descKey": "armor.cloth_tunic.desc",
+    "armor": 2,
+    "price": 0,
+    "rarity": "common",
+    "look": {
+      "type": "cloth"
+    }
+  },
+  {
+    "id": "leather_armor",
+    "nameKey": "armor.leather_armor.name",
+    "descKey": "armor.leather_armor.desc",
+    "armor": 5,
+    "bonuses": {
+      "moveSpeed": 10
+    },
+    "price": 90,
+    "rarity": "common",
+    "look": {
+      "type": "light",
+      "color": 9067051
+    }
+  },
+  {
+    "id": "iron_mail",
+    "nameKey": "armor.iron_mail.name",
+    "descKey": "armor.iron_mail.desc",
+    "armor": 10,
+    "bonuses": {
+      "maxHp": 2
+    },
+    "price": 200,
+    "rarity": "common",
+    "look": {
+      "type": "plate",
+      "color": 12106952,
+      "trim": 10133676
+    }
+  },
+  {
+    "id": "emberplate",
+    "nameKey": "armor.emberplate.name",
+    "descKey": "armor.emberplate.desc",
+    "armor": 12,
+    "bonuses": {
+      "resistElement": "fire",
+      "maxHp": 2
+    },
+    "price": 0,
+    "rarity": "rare",
+    "look": {
+      "type": "plate",
+      "color": 13134410,
+      "trim": 15250250,
+      "rare": true
+    }
+  },
+  {
+    "id": "tidescale",
+    "nameKey": "armor.tidescale.name",
+    "descKey": "armor.tidescale.desc",
+    "armor": 9,
+    "bonuses": {
+      "resistElement": "water",
+      "moveSpeed": 15
+    },
+    "price": 0,
+    "rarity": "rare",
+    "look": {
+      "type": "plate",
+      "color": 5937872,
+      "trim": 10541288,
+      "rare": true
+    }
+  },
+  {
+    "id": "gildedplate",
+    "nameKey": "armor.gildedplate.name",
+    "descKey": "armor.gildedplate.desc",
+    "armor": 13,
+    "bonuses": {
+      "resistElement": "light",
+      "maxHp": 4
+    },
+    "price": 0,
+    "rarity": "rare",
+    "look": {
+      "type": "plate",
+      "color": 13214247,
+      "trim": 16773296,
+      "rare": true
+    }
+  },
+  {
+    "id": "wraithcloak",
+    "nameKey": "armor.wraithcloak.name",
+    "descKey": "armor.wraithcloak.desc",
+    "armor": 7,
+    "bonuses": {
+      "resistElement": "dark",
+      "moveSpeed": 20
+    },
+    "price": 0,
+    "rarity": "rare",
+    "look": {
+      "type": "light",
+      "color": 3814736,
+      "rare": true
+    }
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "id": "q_first_friend",
+    "titleKey": "quest.first_friend.title",
+    "descKey": "quest.first_friend.desc",
+    "giver": "elder",
+    "objective": { "type": "recruit", "target": "leafling" },
+    "reward": { "gold": 50 }
+  },
+  {
+    "id": "q_clear_forest",
+    "titleKey": "quest.clear_forest.title",
+    "descKey": "quest.clear_forest.desc",
+    "giver": "elder",
+    "objective": { "type": "defeat", "target": "shadepup", "count": 3 },
+    "reward": { "gold": 80, "item": "health_potion" }
+  },
+  {
+    "id": "q_reach_mountain",
+    "titleKey": "quest.reach_mountain.title",
+    "descKey": "quest.reach_mountain.desc",
+    "giver": "elder",
+    "objective": { "type": "reach_zone", "zone": "mountain" },
+    "reward": { "gold": 120 }
+  }
+]

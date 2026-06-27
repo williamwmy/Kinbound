@@ -1,0 +1,58 @@
+[
+  {
+    "id": "fire",
+    "nameKey": "element.fire",
+    "color": 16729122,
+    "strongAgainst": ["nature", "wind"],
+    "weakAgainst": ["water", "earth"]
+  },
+  {
+    "id": "water",
+    "nameKey": "element.water",
+    "color": 3381759,
+    "strongAgainst": ["fire", "earth"],
+    "weakAgainst": ["nature", "lightning"]
+  },
+  {
+    "id": "earth",
+    "nameKey": "element.earth",
+    "color": 10053171,
+    "strongAgainst": ["lightning", "fire"],
+    "weakAgainst": ["water", "wind"]
+  },
+  {
+    "id": "nature",
+    "nameKey": "element.nature",
+    "color": 3394628,
+    "strongAgainst": ["water", "earth"],
+    "weakAgainst": ["fire", "wind"]
+  },
+  {
+    "id": "wind",
+    "nameKey": "element.wind",
+    "color": 10092492,
+    "strongAgainst": ["earth", "nature"],
+    "weakAgainst": ["fire", "lightning"]
+  },
+  {
+    "id": "lightning",
+    "nameKey": "element.lightning",
+    "color": 16768307,
+    "strongAgainst": ["water", "wind"],
+    "weakAgainst": ["earth", "nature"]
+  },
+  {
+    "id": "light",
+    "nameKey": "element.light",
+    "color": 16777130,
+    "strongAgainst": ["dark"],
+    "weakAgainst": ["dark"]
+  },
+  {
+    "id": "dark",
+    "nameKey": "element.dark",
+    "color": 6697881,
+    "strongAgainst": ["light"],
+    "weakAgainst": ["light"]
+  }
+]

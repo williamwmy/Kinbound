@@ -1,0 +1,71 @@
+[
+  {
+    "id": "health_potion",
+    "kind": "consumable",
+    "nameKey": "item.health_potion.name",
+    "descKey": "item.health_potion.desc",
+    "effect": { "type": "heal", "amount": 6 },
+    "price": 25,
+    "stackable": true
+  },
+  {
+    "id": "monster_tonic",
+    "kind": "consumable",
+    "nameKey": "item.monster_tonic.name",
+    "descKey": "item.monster_tonic.desc",
+    "effect": { "type": "heal_monster", "amount": 40 },
+    "price": 30,
+    "stackable": true
+  },
+  {
+    "id": "mana_potion",
+    "kind": "consumable",
+    "nameKey": "item.mana_potion.name",
+    "descKey": "item.mana_potion.desc",
+    "effect": { "type": "restore_mana", "amount": 30 },
+    "price": 30,
+    "stackable": true
+  },
+  {
+    "id": "strength_brew",
+    "kind": "consumable",
+    "nameKey": "item.strength_brew.name",
+    "descKey": "item.strength_brew.desc",
+    "effect": { "type": "buff", "stat": "damage", "amount": 8, "durationMs": 20000 },
+    "price": 50,
+    "stackable": true
+  },
+  {
+    "id": "swift_brew",
+    "kind": "consumable",
+    "nameKey": "item.swift_brew.name",
+    "descKey": "item.swift_brew.desc",
+    "effect": { "type": "buff", "stat": "speed", "amount": 40, "durationMs": 20000 },
+    "price": 50,
+    "stackable": true
+  },
+  {
+    "id": "heart_container",
+    "kind": "heart_container",
+    "nameKey": "item.heart_container.name",
+    "descKey": "item.heart_container.desc",
+    "price": 0,
+    "stackable": false
+  },
+  {
+    "id": "kindred_charm",
+    "kind": "team_slot",
+    "nameKey": "item.kindred_charm.name",
+    "descKey": "item.kindred_charm.desc",
+    "price": 0,
+    "stackable": false
+  },
+  {
+    "id": "dungeon_key",
+    "kind": "key",
+    "nameKey": "item.dungeon_key.name",
+    "descKey": "item.dungeon_key.desc",
+    "price": 0,
+    "stackable": true
+  }
+]

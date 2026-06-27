@@ -1,0 +1,59 @@
+[
+  {
+    "id": "shopkeeper",
+    "nameKey": "npc.shopkeeper.name",
+    "role": "shop",
+    "sprite": "npc_shop",
+    "dialogue": "dlg_shopkeeper",
+    "shopItems": [
+      "iron_sword",
+      "leather_armor",
+      "iron_mail",
+      "health_potion",
+      "monster_tonic",
+      "mana_potion"
+    ]
+  },
+  {
+    "id": "healer",
+    "nameKey": "npc.healer.name",
+    "role": "healer",
+    "sprite": "npc_healer",
+    "dialogue": "dlg_healer"
+  },
+  {
+    "id": "smith",
+    "nameKey": "npc.smith.name",
+    "role": "smith",
+    "sprite": "npc_smith",
+    "dialogue": "dlg_smith",
+    "shopItems": [
+      "battle_axe",
+      "war_hammer",
+      "long_spear",
+      "hunters_bow",
+      "apprentice_staff"
+    ]
+  },
+  {
+    "id": "elder",
+    "nameKey": "npc.elder.name",
+    "role": "questgiver",
+    "sprite": "npc_elder",
+    "dialogue": "dlg_elder"
+  },
+  {
+    "id": "villager",
+    "nameKey": "npc.villager.name",
+    "role": "villager",
+    "sprite": "npc_villager",
+    "dialogue": "dlg_villager"
+  },
+  {
+    "id": "forager",
+    "nameKey": "npc.forager.name",
+    "role": "villager",
+    "sprite": "npc_villager",
+    "dialogue": "dlg_forager"
+  }
+]
