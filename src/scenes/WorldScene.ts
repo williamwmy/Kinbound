@@ -13,6 +13,7 @@ import type { Ally, AttackRequest, Damageable, IWorld } from '../entities/combat
 import { elementMultiplier } from '../systems/ElementSystem';
 import { RecruitmentSystem } from '../systems/RecruitmentSystem';
 import { ExplorationSystem } from '../systems/ExplorationSystem';
+import { monsterMaxHp } from '../systems/Progression';
 
 // Beseirede monstre respawner ikke umiddelbart når man zoner fram og tilbake;
 // de holdes borte i dette tidsrommet (spec kap. 24).
@@ -54,7 +55,8 @@ export class WorldScene extends Phaser.Scene implements IWorld {
   private puzzles: {
     def: PuzzleDef;
     active: boolean[];
-    labels: Phaser.GameObjects.Text[];
+    labels: Phaser.GameObjects.GameObject[];
+    switchSprites: Phaser.GameObjects.Sprite[];
     gate?: Phaser.Physics.Arcade.Sprite;
     gateCollider?: Phaser.Physics.Arcade.Collider;
     solved: boolean;
@@ -90,10 +92,9 @@ export class WorldScene extends Phaser.Scene implements IWorld {
     this.cameras.main.setBackgroundColor(Phaser.Display.Color.IntegerToColor(this.zone.bgColor).rgba);
     this.physics.world.setBounds(0, 0, this.zone.width, this.zone.height);
     this.cameras.main.setBounds(0, 0, this.zone.width, this.zone.height);
-    // flislagt bakke per tema (faller tilbake til generisk 'ground')
-    const groundKey = this.textures.exists(`ground_${this.zone.theme}`)
-      ? `ground_${this.zone.theme}`
-      : 'ground';
+    // flislagt bakke per tema; dungeons får mørkt hule-steingulv (spec kap. 26)
+    const floorTheme = this.zone.id.includes('dungeon') ? 'cave' : this.zone.theme;
+    const groundKey = this.textures.exists(`ground_${floorTheme}`) ? `ground_${floorTheme}` : 'ground';
     this.add.tileSprite(0, 0, this.zone.width, this.zone.height, groundKey).setOrigin(0).setDepth(0);
     this.scatterDecor();
     this.addLighting();
@@ -316,13 +317,27 @@ export class WorldScene extends Phaser.Scene implements IWorld {
       this.physics.add.collider(this.player, sprite);
       this.interactables.push({ sprite, kind: 'obstacle', data: o });
     }
-    // utganger - tydelige glødende portaler med mål-etikett (spec kap. 25)
+    // utganger - tydelige overganger med mål-etikett (spec kap. 25, 26).
+    // Dungeon-mål ("..._dungeon") tegnes som en HULEINNGANG (mørk åpning i stein),
+    // vanlige soneoverganger som en glødende portal.
     for (const ex of this.zone.exits) {
-      const gated = !!ex.requires && !ExplorationSystem.hasAbility(this.profile, ex.requires);
-      const sprite = this.add.sprite(ex.x, ex.y, 'exit').setDepth(5);
-      if (gated) {
-        // veien er sperret: demp portalen, ingen lokkende puls
+      const doorKey = `${this.zone.id}:${ex.to}`;
+      const alreadyUnlocked = (this.profile.unlockedDoors ?? []).includes(doorKey);
+      const lockedByItem = !!ex.requiresItem && !alreadyUnlocked && !this.profile.inventory.some((e) => e.id === ex.requiresItem && e.count > 0);
+      const gated = (!!ex.requires && !ExplorationSystem.hasAbility(this.profile, ex.requires)) || lockedByItem;
+      const isCave = ex.to.includes('dungeon');
+      const sprite = this.add.sprite(ex.x, ex.y, isCave ? 'cave' : 'exit').setDepth(5);
+      if (lockedByItem) {
+        // låst med nøkkel (Zelda-stil): demp + hengelås-ikon over inngangen
+        sprite.setAlpha(0.4);
+        this.add.text(ex.x, ex.y, '🔒', { fontSize: '22px' }).setOrigin(0.5).setDepth(7);
+      } else if (gated) {
+        // veien er sperret: demp overgangen, ingen lokkende effekt
         sprite.setAlpha(0.35);
+      } else if (isCave) {
+        // varm, flimrende fakkelglød fra dypet av hulen
+        const glow = this.add.circle(ex.x, ex.y + 6, 9, 0xffb060, 0.3).setDepth(5);
+        this.tweens.add({ targets: glow, alpha: { from: 0.14, to: 0.34 }, scale: { from: 0.85, to: 1.2 }, duration: 1100, yoyo: true, repeat: -1, ease: 'Sine.InOut' });
       } else {
         // pulserende glød så det leses som en aktiv portal
         this.tweens.add({ targets: sprite, scale: { from: 1, to: 1.1 }, alpha: { from: 0.85, to: 1 }, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.InOut' });
@@ -356,11 +371,15 @@ export class WorldScene extends Phaser.Scene implements IWorld {
         def: pz,
         active: pz.switches.map(() => already),
         labels: [],
+        switchSprites: [],
         solved: already,
       };
+      // ordnede puslespill viser hva runen ER (stein/lianer ...) + et rekkefølge-tall
+      const swTex = (sw: import('../types').PuzzleSwitch) =>
+        pz.ordered && sw.requires && this.textures.exists(`obs_${sw.requires}`) ? `obs_${sw.requires}` : 'rune';
       if (already) {
         // allerede løst: vis lyse runer + avdekket belønning (om uåpnet)
-        for (const sw of pz.switches) this.add.sprite(sw.x, sw.y, 'rune').setDepth(5).setScale(1.3).setTint(0x66ff99);
+        for (const sw of pz.switches) this.add.sprite(sw.x, sw.y, swTex(sw)).setDepth(5).setScale(1.1).setTint(0x66ff99);
         this.spawnRewardChest(pz);
       } else {
         // forsegling som blokkerer ally-bevegelse til puslespillet er løst
@@ -373,10 +392,17 @@ export class WorldScene extends Phaser.Scene implements IWorld {
         this.physics.add.collider(this.enemies, gate);
         // bryterne
         pz.switches.forEach((sw, si) => {
-          const sprite = this.add.sprite(sw.x, sw.y, 'rune').setDepth(5).setScale(1.3);
+          const sprite = this.add.sprite(sw.x, sw.y, swTex(sw)).setDepth(5).setScale(pz.ordered ? 1.2 : 1.3);
           this.tweens.add({ targets: sprite, alpha: { from: 0.7, to: 1 }, duration: 1000, yoyo: true, repeat: -1, ease: 'Sine.InOut' });
+          state.switchSprites.push(sprite);
           this.interactables.push({ sprite, kind: 'switch', data: { puzzle: this.puzzles.length, sw: si } });
-          if (sw.requires) state.labels.push(this.addRequirementLabel(sw.x, sw.y - 26, sw.requires));
+          if (sw.requires) state.labels.push(this.addRequirementLabel(sw.x, sw.y - 30, sw.requires));
+          // rekkefølge-tall for ordnede puslespill (knus/dyrk i riktig rekkefølge)
+          if (pz.ordered) {
+            state.labels.push(
+              this.add.text(sw.x, sw.y, String(si + 1), { fontSize: '20px', color: '#ffe066', fontStyle: 'bold', stroke: '#000000', strokeThickness: 4 }).setOrigin(0.5).setDepth(8),
+            );
+          }
         });
       }
       this.puzzles.push(state);
@@ -396,6 +422,25 @@ export class WorldScene extends Phaser.Scene implements IWorld {
     const sw = pz.def.switches[ref.sw];
     if (sw.requires && !ExplorationSystem.hasAbility(this.profile, sw.requires)) {
       EventBus.emit(Events.Toast, t('exploration.need_ability', { ability: t(`ability_explore.${sw.requires}`) }));
+      return;
+    }
+    // Ordnet puslespill: må knuses/dyrkes i riktig rekkefølge (1,2,3). Feil -> nullstill.
+    if (pz.def.ordered) {
+      const expected = pz.active.filter(Boolean).length; // neste forventede indeks
+      if (ref.sw !== expected) {
+        pz.active = pz.active.map(() => false);
+        pz.switchSprites.forEach((s) => s.clearTint());
+        EventBus.emit(Events.Toast, t('puzzle.wrong_order'));
+        EventBus.emit('sfx', 'hit');
+        return;
+      }
+      pz.active[ref.sw] = true;
+      sprite.setTint(0x66ff99);
+      this.exploreEffect(sprite.x, sprite.y, sw.requires ?? 'charge_runes');
+      EventBus.emit('sfx', 'explore');
+      const litO = pz.active.filter(Boolean).length;
+      if (litO < pz.active.length) EventBus.emit(Events.Toast, t('puzzle.activated', { lit: litO, total: pz.active.length }));
+      else this.solvePuzzle(ref.puzzle);
       return;
     }
     pz.active[ref.sw] = true;
@@ -634,6 +679,26 @@ export class WorldScene extends Phaser.Scene implements IWorld {
     regions.forEach((t, idx) => {
       const cx = t.x + t.w / 2;
       const cy = t.y + t.h / 2;
+      // Stein-vegg (dungeon-korridorer, spec kap. 26): alltid solid, grå med fuger.
+      if (t.type === 'wall') {
+        this.terrainObjs.push(this.add.rectangle(cx, cy, t.w, t.h, 0x4a4650, 1).setDepth(3));
+        this.terrainObjs.push(this.add.rectangle(cx, cy - t.h / 2 + 4, t.w, 8, 0x5f5a68, 1).setDepth(3)); // lysere topp
+        this.terrainObjs.push(this.add.rectangle(cx, cy + t.h / 2 - 3, t.w, 6, 0x35323c, 1).setDepth(3)); // skygge-base
+        // murstein-fuger
+        for (let mx = t.x + 24; mx < t.x + t.w - 8; mx += 48) this.terrainObjs.push(this.add.rectangle(mx, cy, 2, t.h, 0x35323c, 0.8).setDepth(3));
+        for (let my = t.y + 18; my < t.y + t.h - 8; my += 24) this.terrainObjs.push(this.add.rectangle(cx, my, t.w, 2, 0x35323c, 0.6).setDepth(3));
+        const wblock = this.terrainBlocks!.create(cx, cy, 'pixel') as Phaser.Physics.Arcade.Sprite;
+        wblock.setVisible(false).setDisplaySize(t.w, t.h).refreshBody();
+        return;
+      }
+      // Hekk-vegg (labyrint, spec kap. 25): frodig busk-tekstur (tilbar) + mørk kant.
+      if (t.type === 'hedge') {
+        this.terrainObjs.push(this.add.tileSprite(cx, cy, t.w, t.h, 'hedge_tile').setDepth(3));
+        this.terrainObjs.push(this.add.rectangle(cx, cy, t.w, t.h).setStrokeStyle(3, 0x16300d, 0.85).setDepth(3)); // kant
+        const hblock = this.terrainBlocks!.create(cx, cy, 'pixel') as Phaser.Physics.Arcade.Sprite;
+        hblock.setVisible(false).setDisplaySize(t.w, t.h).refreshBody();
+        return;
+      }
       const fill = t.type === 'water' ? 0x3a6ea5 : t.type === 'lava' ? 0xc4471f : 0x14161c;
       this.terrainObjs.push(this.add.rectangle(cx, cy, t.w, t.h, fill, t.type === 'gap' ? 0.92 : 0.8).setDepth(2));
       this.terrainObjs.push(
@@ -642,12 +707,21 @@ export class WorldScene extends Phaser.Scene implements IWorld {
       // Bygd permanent tidligere -> krysningen blir, uavhengig av om kin er i laget nå.
       const key = `${this.zone.id}:T${idx}`;
       const alreadyBuilt = built.includes(key);
-      const passable = alreadyBuilt || ExplorationSystem.hasAbility(this.profile, t.requires);
+      // Uten `requires` er regionen alltid solid (selve elva utenom brostedet).
+      const passable = !!t.requires && (alreadyBuilt || ExplorationSystem.hasAbility(this.profile, t.requires));
       if (passable) {
         // Krysningsgrafikken tegnes skjult og "bygges" med animasjon når man når den.
         const cross: Phaser.GameObjects.Shape[] = [];
         if (t.requires === 'build_bridges') {
-          cross.push(this.add.rectangle(cx, cy, t.w, Math.min(t.h, 22), 0x8a5a2b, 0.96).setDepth(3));
+          // Bro-DEKK som dekker HELE krysningen (ikke en tynn planke over vann),
+          // så man tydelig går på broen og ikke i vannet.
+          cross.push(this.add.rectangle(cx, cy, t.w, t.h, 0x8a5a2b, 1).setDepth(3));
+          const along = t.w >= t.h; // bro spenner langs den lengste aksen
+          if (along) for (let px = t.x + 8; px < t.x + t.w - 4; px += 16) cross.push(this.add.rectangle(px, cy, 2, t.h, 0x6e4620, 1).setDepth(3));
+          else for (let py = t.y + 8; py < t.y + t.h - 4; py += 16) cross.push(this.add.rectangle(cx, py, t.w, 2, 0x6e4620, 1).setDepth(3));
+          // sidekanter (rekkverk) langs bredden
+          cross.push(this.add.rectangle(cx, t.y + 3, t.w, 5, 0x9a6a3b, 1).setDepth(3));
+          cross.push(this.add.rectangle(cx, t.y + t.h - 3, t.w, 5, 0x9a6a3b, 1).setDepth(3));
         } else if (t.requires === 'freeze_water') {
           cross.push(this.add.rectangle(cx, cy, t.w, t.h, 0xcfeeff, 0.7).setDepth(3));
         } else {
@@ -659,10 +733,10 @@ export class WorldScene extends Phaser.Scene implements IWorld {
         this.terrainObjs.push(...cross);
         if (alreadyBuilt) {
           // allerede bygd: vis ferdig krysning uten ny animasjon
-          this.terrainReveals.push({ key, cx, cy, requires: t.requires, objs: cross, revealed: true });
+          this.terrainReveals.push({ key, cx, cy, requires: t.requires!, objs: cross, revealed: true });
         } else {
           cross.forEach((o) => o.setAlpha(0));
-          this.terrainReveals.push({ key, cx, cy, requires: t.requires, objs: cross, revealed: false });
+          this.terrainReveals.push({ key, cx, cy, requires: t.requires!, objs: cross, revealed: false });
         }
       } else {
         const block = this.terrainBlocks!.create(cx, cy, 'pixel') as Phaser.Physics.Arcade.Sprite;
@@ -743,7 +817,8 @@ export class WorldScene extends Phaser.Scene implements IWorld {
     }
   }
 
-  private terrainHint(req: string): void {
+  private terrainHint(req: string | undefined): void {
+    if (!req) return; // solid vann/lava uten krav - barrieren er åpenbar, ingen hint
     const now = this.time.now;
     if (now - this.lastTerrainHint < 1800) return;
     this.lastTerrainHint = now;
@@ -1044,7 +1119,7 @@ export class WorldScene extends Phaser.Scene implements IWorld {
     for (const m of this.profile.monsters) {
       m.fainted = false;
       const def = Data.monster(m.speciesId);
-      m.currentHp = def.forms[m.evolved ? 1 : 0].stats.maxHp;
+      m.currentHp = monsterMaxHp(def.forms[m.evolved ? 1 : 0].stats.maxHp, m.level);
       m.currentMana = def.forms[m.evolved ? 1 : 0].stats.maxMana ?? 0;
     }
     EventBus.emit(Events.PlayerHpChanged, this.profile.currentHp, SaveManager.computeMaxHp());
@@ -1076,12 +1151,13 @@ export class WorldScene extends Phaser.Scene implements IWorld {
   }
 
   private grantLoot(id: string, kind: 'item' | 'weapon' | 'armor'): void {
+    const got = (name: string) => EventBus.emit(Events.Toast, t('ui.got_loot', { item: name }));
     if (kind === 'weapon') {
       if (!this.profile.ownedWeapons.includes(id)) this.profile.ownedWeapons.push(id);
-      EventBus.emit(Events.Toast, t(Data.weapon(id).nameKey));
+      got(t(Data.weapon(id).nameKey));
     } else if (kind === 'armor') {
       if (!this.profile.ownedArmor.includes(id)) this.profile.ownedArmor.push(id);
-      EventBus.emit(Events.Toast, t(Data.armorDef(id).nameKey));
+      got(t(Data.armorDef(id).nameKey));
     } else {
       const item = Data.item(id);
       if (item.kind === 'heart_container') {
@@ -1089,12 +1165,12 @@ export class WorldScene extends Phaser.Scene implements IWorld {
         this.profile.maxHp += 4;
         this.profile.currentHp = SaveManager.computeMaxHp();
         EventBus.emit(Events.PlayerHpChanged, this.profile.currentHp, SaveManager.computeMaxHp());
-        EventBus.emit(Events.Toast, t('item.heart_container.name'));
+        got(t('item.heart_container.name'));
       } else if (item.kind === 'team_slot') {
         this.expandTeam();
       } else {
         this.addItem(id, 1);
-        EventBus.emit(Events.Toast, t(item.nameKey));
+        got(t(item.nameKey));
       }
     }
   }
@@ -1217,6 +1293,25 @@ export class WorldScene extends Phaser.Scene implements IWorld {
 
   private tryExit(exit: ZoneDef['exits'][number]): void {
     if (this.time.now < this.exitCooldownUntil || this.exitBuilding) return;
+    // Nøkkel-låst inngang (Zelda-stil): forbruker en nøkkel ÉN gang, så forblir åpen.
+    if (exit.requiresItem) {
+      const doorKey = `${this.zone.id}:${exit.to}`;
+      this.profile.unlockedDoors = this.profile.unlockedDoors ?? [];
+      if (!this.profile.unlockedDoors.includes(doorKey)) {
+        const held = this.profile.inventory.find((e) => e.id === exit.requiresItem && e.count > 0);
+        if (!held) {
+          if (this.time.now - this.lastExitHint > 1800) {
+            this.lastExitHint = this.time.now;
+            EventBus.emit(Events.Toast, t('chest.locked', { item: t(Data.item(exit.requiresItem).nameKey) }));
+          }
+          return;
+        }
+        held.count -= 1;
+        this.profile.inventory = this.profile.inventory.filter((e) => e.count > 0);
+        this.profile.unlockedDoors.push(doorKey); // permanent åpen
+        EventBus.emit(Events.Toast, t('ui.unlocked', { item: t(Data.item(exit.requiresItem).nameKey) }));
+      }
+    }
     if (exit.requires && !ExplorationSystem.hasAbility(this.profile, exit.requires)) {
       // veien er sperret - vis hva som trengs (men ikke spam toasten hvert frame)
       if (this.time.now - this.lastExitHint > 1800) {
@@ -1358,9 +1453,11 @@ export class WorldScene extends Phaser.Scene implements IWorld {
 
   // --- lagring ------------------------------------------------------------
   private autosave(): void {
+    // Stille autolagring (spec kap. 30): en diskret lyd, men INGEN toast - den
+    // skjedde hvert soneskifte/kiste/boss og overskygget viktige meldinger
+    // (loot, rekruttering, lagvekst). Lyden via Events.Saved er nok feedback.
     SaveManager.save();
     EventBus.emit(Events.Saved);
-    EventBus.emit(Events.Toast, t('ui.saved'));
   }
 
   private cleanup(): void {

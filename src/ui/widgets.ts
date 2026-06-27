@@ -80,6 +80,14 @@ export class Button extends Phaser.GameObjects.Container {
     this.setAlpha(enabled ? 1 : 0.45);
     return this;
   }
+
+  /** Slå treffområdet av/på - brukes for å kutte input på knapper som er rullet
+   * utenfor det synlige listeområdet (så de ikke ligger «bak» faner/andre knapper). */
+  setHitEnabled(on: boolean): this {
+    if (on && !this.rect.input) this.rect.setInteractive({ useHandCursor: true });
+    else if (!on && this.rect.input) this.rect.disableInteractive();
+    return this;
+  }
 }
 
 export function panel(

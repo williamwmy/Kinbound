@@ -75,6 +75,7 @@ class SaveManagerImpl {
       clearedTerrain: [],
       solvedPuzzles: [],
       visitedZones: ['village'],
+      unlockedDoors: [],
       defeatedSpawns: {},
       questProgress: {},
       heartContainers: 0,

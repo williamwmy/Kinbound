@@ -265,6 +265,8 @@ export interface ZoneExit {
   spawnY: number;
   /** utforskningsevne som kreves for å passere */
   requires?: ExplorationAbilityId;
+  /** item-id (nøkkel) som kreves og forbrukes for å låse opp (Zelda-stil, kap. 26) */
+  requiresItem?: string;
 }
 
 export interface ChestDef {
@@ -299,8 +301,10 @@ export interface TerrainRegion {
   y: number;
   w: number;
   h: number;
-  type: 'water' | 'lava' | 'gap';
-  requires: ExplorationAbilityId;
+  type: 'water' | 'lava' | 'gap' | 'hedge' | 'wall';
+  /** evne som kreves for å krysse her. Uten denne er regionen ALLTID solid
+   * (en permanent vegg, f.eks. selve elva utenom brostedet, eller hekk-labyrint). */
+  requires?: ExplorationAbilityId;
 }
 
 export interface ZoneDef {
@@ -346,6 +350,8 @@ export interface PuzzleSwitch {
 export interface PuzzleDef {
   id: string;
   type: 'switches';
+  /** hvis sant må bryterne aktiveres i rekkefølge (indeks 0,1,2 ...); feil rekkefølge nullstiller */
+  ordered?: boolean;
   switches: PuzzleSwitch[];
   /** porten/forseglingen som åpnes når alle bryterne er aktive */
   gate: { x: number; y: number; w: number; h: number };
@@ -415,6 +421,8 @@ export interface ProfileData {
   solvedPuzzles?: string[];
   /** id-er på soner spilleren har besøkt (avdekker verdenskartet, spec kap. 32) */
   visitedZones?: string[];
+  /** nøkler (`sone:mål`) på dører som er låst opp permanent med en nøkkel (Zelda-stil) */
+  unlockedDoors?: string[];
   /** spawn-nøkkel (`sone#index`) -> tidspunkt beseiret, for respawn-nedkjøling */
   defeatedSpawns?: Record<string, number>;
   /** quest-id -> framdrift */

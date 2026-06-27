@@ -45,7 +45,7 @@ const validRoles = new Set(Object.keys(nb).filter((k) => k.startsWith('role.')).
 const validWeaponTypes = new Set(['sword', 'axe', 'hammer', 'spear', 'bow', 'staff']);
 const validResource = new Set(['cooldown', 'mana']);
 const validAggro = new Set(['sight', 'sound', 'always']);
-const validTerrain = new Set(['water', 'lava', 'gap']);
+const validTerrain = new Set(['water', 'lava', 'gap', 'hedge', 'wall']);
 
 // --- hjelpere --------------------------------------------------------------
 const loc = (ctx, key) => {
@@ -123,7 +123,10 @@ for (const z of zones) {
     ref(`${c}.spawn`, s.monster, monsterIds, 'monster');
     if (s.ai?.aggro && !validAggro.has(s.ai.aggro)) err(`${c}.spawn`, `ukjent ai.aggro: "${s.ai.aggro}"`);
   }
-  for (const e of z.exits || []) ref(`${c}.exit`, e.to, zoneIds, 'mål-sone');
+  for (const e of z.exits || []) {
+    ref(`${c}.exit`, e.to, zoneIds, 'mål-sone');
+    if (e.requiresItem) ref(`${c}.exit`, e.requiresItem, itemIds, 'requiresItem-nøkkel');
+  }
   for (const p of z.npcs || []) ref(`${c}.npc`, p.npc, npcIds, 'npc');
   const checkChest = (ctx, ch) => {
     if (allChestIds.has(ch.id)) err(ctx, `duplikat kiste-id: "${ch.id}"`);
@@ -141,7 +144,8 @@ for (const z of zones) {
   }
   for (const tr of z.terrain || []) {
     if (!validTerrain.has(tr.type)) err(`${c}.terrain`, `ukjent terreng-type: "${tr.type}"`);
-    if (!validAbilities.has(tr.requires)) err(`${c}.terrain`, `ukjent requires-evne: "${tr.requires}"`);
+    // requires er valgfritt: uten det er regionen alltid solid (en vegg)
+    if (tr.requires && !validAbilities.has(tr.requires)) err(`${c}.terrain`, `ukjent requires-evne: "${tr.requires}"`);
   }
   for (const pz of z.puzzles || []) {
     const pc = `${c}.puzzle:${pz.id}`;

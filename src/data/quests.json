@@ -4,23 +4,105 @@
     "titleKey": "quest.first_friend.title",
     "descKey": "quest.first_friend.desc",
     "giver": "elder",
-    "objective": { "type": "recruit", "target": "leafling" },
-    "reward": { "gold": 50 }
+    "objective": {
+      "type": "recruit",
+      "target": "leafling"
+    },
+    "reward": {
+      "gold": 50
+    }
   },
   {
     "id": "q_clear_forest",
     "titleKey": "quest.clear_forest.title",
     "descKey": "quest.clear_forest.desc",
     "giver": "elder",
-    "objective": { "type": "defeat", "target": "shadepup", "count": 3 },
-    "reward": { "gold": 80, "item": "health_potion" }
+    "objective": {
+      "type": "defeat",
+      "target": "shadepup",
+      "count": 3
+    },
+    "reward": {
+      "gold": 80,
+      "item": "health_potion"
+    }
   },
   {
     "id": "q_reach_mountain",
     "titleKey": "quest.reach_mountain.title",
     "descKey": "quest.reach_mountain.desc",
     "giver": "elder",
-    "objective": { "type": "reach_zone", "zone": "mountain" },
-    "reward": { "gold": 120 }
+    "objective": {
+      "type": "reach_zone",
+      "zone": "mountain"
+    },
+    "reward": {
+      "gold": 120
+    }
+  },
+  {
+    "id": "q_reach_swamp",
+    "titleKey": "quest.reach_swamp.title",
+    "descKey": "quest.reach_swamp.desc",
+    "giver": "elder",
+    "objective": {
+      "type": "reach_zone",
+      "zone": "swamp"
+    },
+    "reward": {
+      "gold": 100
+    }
+  },
+  {
+    "id": "q_reach_volcano",
+    "titleKey": "quest.reach_volcano.title",
+    "descKey": "quest.reach_volcano.desc",
+    "giver": "elder",
+    "objective": {
+      "type": "reach_zone",
+      "zone": "volcano"
+    },
+    "reward": {
+      "gold": 140
+    }
+  },
+  {
+    "id": "q_reach_snow",
+    "titleKey": "quest.reach_snow.title",
+    "descKey": "quest.reach_snow.desc",
+    "giver": "elder",
+    "objective": {
+      "type": "reach_zone",
+      "zone": "snow"
+    },
+    "reward": {
+      "gold": 180
+    }
+  },
+  {
+    "id": "q_reach_ruins",
+    "titleKey": "quest.reach_ruins.title",
+    "descKey": "quest.reach_ruins.desc",
+    "giver": "elder",
+    "objective": {
+      "type": "reach_zone",
+      "zone": "ruins"
+    },
+    "reward": {
+      "gold": 220
+    }
+  },
+  {
+    "id": "q_reach_castle",
+    "titleKey": "quest.reach_castle.title",
+    "descKey": "quest.reach_castle.desc",
+    "giver": "elder",
+    "objective": {
+      "type": "reach_zone",
+      "zone": "castle"
+    },
+    "reward": {
+      "gold": 300
+    }
   }
 ]

@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { t } from '../i18n/Localization';
 import { SaveManager } from '../save/SaveManager';
 import { Data } from '../core/DataManager';
+import { monsterMaxHp } from '../systems/Progression';
 import { Button, heading } from '../ui/widgets';
 
 // Spill over (spec kap. 29). Spilleren taper når HP blir 0 og våkner i landsbyen.
@@ -27,7 +28,7 @@ export class GameOverScene extends Phaser.Scene {
       for (const m of profile.monsters) {
         const form = Data.monster(m.speciesId).forms[m.evolved ? 1 : 0];
         m.fainted = false;
-        m.currentHp = form.stats.maxHp;
+        m.currentHp = monsterMaxHp(form.stats.maxHp, m.level);
         m.currentMana = form.stats.maxMana ?? 0;
       }
       SaveManager.save();

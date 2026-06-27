@@ -55,5 +55,47 @@
     "role": "villager",
     "sprite": "npc_villager",
     "dialogue": "dlg_forager"
+  },
+  {
+    "id": "mountaineer",
+    "nameKey": "npc.mountaineer.name",
+    "role": "villager",
+    "sprite": "npc_villager",
+    "dialogue": "dlg_mountaineer"
+  },
+  {
+    "id": "bogkeeper",
+    "nameKey": "npc.bogkeeper.name",
+    "role": "villager",
+    "sprite": "npc_villager",
+    "dialogue": "dlg_bogkeeper"
+  },
+  {
+    "id": "emberkeeper",
+    "nameKey": "npc.emberkeeper.name",
+    "role": "villager",
+    "sprite": "npc_villager",
+    "dialogue": "dlg_emberkeeper"
+  },
+  {
+    "id": "snowkeeper",
+    "nameKey": "npc.snowkeeper.name",
+    "role": "villager",
+    "sprite": "npc_villager",
+    "dialogue": "dlg_snowkeeper"
+  },
+  {
+    "id": "ruinkeeper",
+    "nameKey": "npc.ruinkeeper.name",
+    "role": "villager",
+    "sprite": "npc_elder",
+    "dialogue": "dlg_ruinkeeper"
+  },
+  {
+    "id": "castellan",
+    "nameKey": "npc.castellan.name",
+    "role": "villager",
+    "sprite": "npc_elder",
+    "dialogue": "dlg_castellan"
   }
 ]

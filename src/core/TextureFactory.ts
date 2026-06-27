@@ -434,6 +434,18 @@ export const TextureFactory = {
     }, 80, 70);
 
     // lite hjerte (vennskaps-effekt ved rekruttering, spec kap. 14, 36)
+    // frodig hekk-flis (skogslabyrint, spec kap. 25) - tilbar busk-tekstur
+    make('hedge_tile', (g) => {
+      g.fillStyle(0x244a1e, 1); g.fillRect(0, 0, 32, 32); // mørk base
+      // overlappende løvverk-klumper i to grønntoner (dekker hele flisen, tilbar)
+      g.fillStyle(0x336128, 1);
+      g.fillCircle(7, 7, 9); g.fillCircle(24, 9, 9); g.fillCircle(14, 22, 9); g.fillCircle(29, 26, 8); g.fillCircle(2, 26, 8);
+      g.fillStyle(0x3f7531, 1); // høylys-topper
+      g.fillCircle(8, 6, 4); g.fillCircle(23, 8, 4); g.fillCircle(15, 20, 4); g.fillCircle(28, 24, 3);
+      g.fillStyle(0x18330f, 0.55); // skygge-lommer
+      g.fillCircle(18, 15, 4); g.fillCircle(4, 16, 3.5);
+    }, 32, 32);
+
     make('heart', (g) => {
       g.fillStyle(0xff6b8a, 1);
       g.fillCircle(5, 6, 4.2); g.fillCircle(13, 6, 4.2);
@@ -496,6 +508,29 @@ export const TextureFactory = {
       },
       44,
       64,
+    );
+
+    // huleinngang (dungeon-portal): mørk åpning i en steinhaug (spec kap. 26)
+    make(
+      'cave',
+      (g) => {
+        // steinhaug rundt åpningen
+        g.fillStyle(0x5a5048, 1); g.fillRoundedRect(2, 10, 60, 46, 16);
+        g.fillStyle(0x6b6258, 1); g.fillRoundedRect(7, 9, 50, 14, 12); // lysere topp
+        g.fillStyle(0x4a423a, 1); g.fillRect(2, 46, 60, 12); // mørkere base
+        // selve huleåpningen - mørk bue
+        g.fillStyle(0x141016, 1); g.fillEllipse(32, 36, 36, 40);
+        g.fillStyle(0x000000, 1); g.fillEllipse(32, 40, 26, 30); // dypt mørke
+        // hakkete kanter / stalaktitter i munningen
+        g.fillStyle(0x6b6258, 1);
+        g.fillTriangle(18, 20, 26, 20, 22, 30);
+        g.fillTriangle(40, 20, 48, 20, 44, 31);
+        g.fillTriangle(14, 26, 20, 26, 17, 34);
+        // løse steiner ved foten
+        g.fillStyle(0x4a423a, 1); g.fillCircle(10, 54, 5); g.fillCircle(54, 54, 5); g.fillCircle(46, 56, 3.5);
+      },
+      64,
+      60,
     );
 
     // 1x1 hvit piksel (for fleksible fyll)
@@ -667,6 +702,8 @@ const GROUND_THEMES: Record<
   snow: { base: 0xd6e0ea, dark: 0xc8d4e0, light: 0xe6eef6, detail: 'snow', dcol: 0xffffff },
   ruins: { base: 0x8a7f63, dark: 0x7e735a, light: 0x968b6e, detail: 'pebble', dcol: 0xa89c7c },
   castle: { base: 0x4e4a5a, dark: 0x444050, light: 0x585466, detail: 'seam', dcol: 0x36323f },
+  // mørkt steingulv for huler/dungeons (spec kap. 26)
+  cave: { base: 0x2c2832, dark: 0x252029, light: 0x39343f, detail: 'pebble', dcol: 0x423d49 },
 };
 
 // Hvilke dekorasjoner som hører til hvert sonetema.

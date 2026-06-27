@@ -4,7 +4,10 @@
     "kind": "consumable",
     "nameKey": "item.health_potion.name",
     "descKey": "item.health_potion.desc",
-    "effect": { "type": "heal", "amount": 6 },
+    "effect": {
+      "type": "heal",
+      "amount": 6
+    },
     "price": 25,
     "stackable": true
   },
@@ -13,7 +16,10 @@
     "kind": "consumable",
     "nameKey": "item.monster_tonic.name",
     "descKey": "item.monster_tonic.desc",
-    "effect": { "type": "heal_monster", "amount": 40 },
+    "effect": {
+      "type": "heal_monster",
+      "amount": 40
+    },
     "price": 30,
     "stackable": true
   },
@@ -22,7 +28,10 @@
     "kind": "consumable",
     "nameKey": "item.mana_potion.name",
     "descKey": "item.mana_potion.desc",
-    "effect": { "type": "restore_mana", "amount": 30 },
+    "effect": {
+      "type": "restore_mana",
+      "amount": 30
+    },
     "price": 30,
     "stackable": true
   },
@@ -31,7 +40,12 @@
     "kind": "consumable",
     "nameKey": "item.strength_brew.name",
     "descKey": "item.strength_brew.desc",
-    "effect": { "type": "buff", "stat": "damage", "amount": 8, "durationMs": 20000 },
+    "effect": {
+      "type": "buff",
+      "stat": "damage",
+      "amount": 8,
+      "durationMs": 20000
+    },
     "price": 50,
     "stackable": true
   },
@@ -40,7 +54,12 @@
     "kind": "consumable",
     "nameKey": "item.swift_brew.name",
     "descKey": "item.swift_brew.desc",
-    "effect": { "type": "buff", "stat": "speed", "amount": 40, "durationMs": 20000 },
+    "effect": {
+      "type": "buff",
+      "stat": "speed",
+      "amount": 40,
+      "durationMs": 20000
+    },
     "price": 50,
     "stackable": true
   },
@@ -65,6 +84,14 @@
     "kind": "key",
     "nameKey": "item.dungeon_key.name",
     "descKey": "item.dungeon_key.desc",
+    "price": 0,
+    "stackable": true
+  },
+  {
+    "id": "forest_key",
+    "kind": "key",
+    "nameKey": "item.forest_key.name",
+    "descKey": "item.forest_key.desc",
     "price": 0,
     "stackable": true
   }

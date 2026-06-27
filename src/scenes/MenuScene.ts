@@ -7,7 +7,7 @@ import { AudioManager } from '../core/AudioManager';
 import { EventBus, Events } from '../core/EventBus';
 import { Button, panel, heading, label } from '../ui/widgets';
 import { QuestSystem } from '../systems/QuestSystem';
-import { xpForNext } from '../systems/Progression';
+import { xpForNext, monsterMaxHp } from '../systems/Progression';
 import type { ProfileData } from '../types';
 
 type MenuType = 'main' | 'shop' | 'quests';
@@ -49,7 +49,9 @@ export class MenuScene extends Phaser.Scene {
     this.npcId = data.npc;
     const { width, height } = this.scale;
     this.add.rectangle(width / 2, height / 2, width, height, 0x000000, 0.6);
-    panel(this, width / 2, height / 2, Math.min(width - 40, 760), height - 60);
+    // Nær-fullskjerm-panel: dekker verden + HUD i margene, og rommer alt innhold
+    // (faner, lukk-knapp, rader) som er lagt ut i full skjermbredde (spec kap. 32).
+    panel(this, width / 2, height / 2, width - 12, height - 12, 0.98);
 
     this.content = this.add.container(0, 0);
     this.setupScroll();
@@ -93,12 +95,27 @@ export class MenuScene extends Phaser.Scene {
       if (!ptr.isDown || this.scrollMin >= 0) return;
       const dy = ptr.position.y - ptr.prevPosition.y;
       this.content.y = Phaser.Math.Clamp(this.content.y + dy, this.scrollMin, 0);
+      this.cullContent();
     });
     // musehjul
     this.input.on('wheel', (_p: unknown, _o: unknown, _dx: number, dy: number) => {
       if (this.scrollMin >= 0) return;
       this.content.y = Phaser.Math.Clamp(this.content.y - dy * 0.5, this.scrollMin, 0);
+      this.cullContent();
     });
+  }
+
+  // Skjul + deaktiver input på listeelementer som er rullet utenfor det synlige
+  // området, så rader/knapper ikke vises over fanene eller under panelet, og
+  // skjulte knappers treffområder ikke ligger «bak» andre knapper (brukerkrav).
+  private cullContent(): void {
+    const cy = this.content.y;
+    for (const child of this.content.list as Phaser.GameObjects.GameObject[]) {
+      const gy = cy + ((child as unknown as { y: number }).y ?? 0);
+      const vis = gy >= this.viewTop - 80 && gy <= this.viewBottom + 30; // maske finpusser kantene
+      (child as unknown as { setVisible?: (v: boolean) => void }).setVisible?.(vis);
+      if (child instanceof Button) child.setHitEnabled(gy >= this.viewTop && gy <= this.viewBottom);
+    }
   }
 
   /** Beregn rulle-grenser etter at en liste er rendret. */
@@ -118,6 +135,7 @@ export class MenuScene extends Phaser.Scene {
       this.scrollHint.destroy();
       this.scrollHint = undefined;
     }
+    this.cullContent();
   }
 
   private scrollHint?: Phaser.GameObjects.Text;
@@ -246,7 +264,7 @@ export class MenuScene extends Phaser.Scene {
     else if (eff.type === 'heal_monster') {
       // Prioriter å gjenopplive et besvimt monster (hovedpoenget, spec kap. 19),
       // ellers helbred det mest skadde monsteret i laget.
-      const maxHpOf = (mm: typeof this.profile.monsters[number]) => Data.monster(mm.speciesId).forms[mm.evolved ? 1 : 0].stats.maxHp;
+      const maxHpOf = (mm: typeof this.profile.monsters[number]) => monsterMaxHp(Data.monster(mm.speciesId).forms[mm.evolved ? 1 : 0].stats.maxHp, mm.level);
       const ratio = (mm: typeof this.profile.monsters[number]) => mm.currentHp / maxHpOf(mm);
       const target =
         this.profile.monsters.find((mm) => mm.fainted) ??
@@ -303,8 +321,9 @@ export class MenuScene extends Phaser.Scene {
           def.resourceSystem === 'mana'
             ? `${t('ui.mana')} ${owned.currentMana}/${form.stats.maxMana ?? 0}`
             : t('ui.cooldown');
+        const maxHp = monsterMaxHp(form.stats.maxHp, owned.level);
         const status =
-          `${t('ui.hp')} ${owned.currentHp}/${form.stats.maxHp}` +
+          `${t('ui.hp')} ${Math.min(owned.currentHp, maxHp)}/${maxHp}` +
           ` · ${t('ui.xp')} ${owned.xp}/${xpForNext(owned.level)}` +
           ` · ${resource}`;
         this.content.add(label(this, width / 2 - 300, y + 42, status, 13, '#9fe0b0'));

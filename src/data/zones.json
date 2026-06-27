@@ -77,8 +77,8 @@
     "spawns": [
       {
         "monster": "leafling",
-        "x": 420,
-        "y": 470,
+        "x": 440,
+        "y": 330,
         "level": 1,
         "ai": {
           "aggro": "sound",
@@ -87,8 +87,8 @@
       },
       {
         "monster": "leafling",
-        "x": 300,
-        "y": 760,
+        "x": 200,
+        "y": 320,
         "level": 1,
         "ai": {
           "aggro": "sound",
@@ -97,8 +97,8 @@
       },
       {
         "monster": "shadepup",
-        "x": 700,
-        "y": 540,
+        "x": 720,
+        "y": 340,
         "level": 2,
         "ai": {
           "aggro": "sight",
@@ -108,7 +108,7 @@
       {
         "monster": "shadepup",
         "x": 640,
-        "y": 670,
+        "y": 430,
         "level": 2,
         "ai": {
           "aggro": "sight",
@@ -117,8 +117,8 @@
       },
       {
         "monster": "shadepup",
-        "x": 820,
-        "y": 620,
+        "x": 830,
+        "y": 400,
         "level": 2,
         "ai": {
           "aggro": "sight",
@@ -127,49 +127,29 @@
       },
       {
         "monster": "gustling",
-        "x": 1010,
-        "y": 330,
+        "x": 1050,
+        "y": 270,
         "level": 2,
         "ai": {
           "aggro": "sight",
-          "range": 440
-        }
-      },
-      {
-        "monster": "gustling",
-        "x": 1150,
-        "y": 880,
-        "level": 2,
-        "ai": {
-          "aggro": "sight",
-          "range": 380,
-          "patrol": [
-            {
-              "x": 1150,
-              "y": 880
-            },
-            {
-              "x": 950,
-              "y": 980
-            },
-            {
-              "x": 1320,
-              "y": 1000
-            }
-          ]
+          "range": 420
         }
       },
       {
         "monster": "mossback",
-        "x": 1320,
-        "y": 640,
+        "x": 1330,
+        "y": 360,
         "level": 3,
-        "boss": true
+        "boss": true,
+        "loot": {
+          "id": "heart_container",
+          "kind": "item"
+        }
       },
       {
         "monster": "shadepup",
-        "x": 1220,
-        "y": 560,
+        "x": 1230,
+        "y": 300,
         "level": 2,
         "ai": {
           "aggro": "sight",
@@ -181,13 +161,43 @@
       {
         "monster": "shadepup",
         "x": 1410,
-        "y": 730,
+        "y": 450,
         "level": 2,
         "ai": {
           "aggro": "sight",
           "range": 300,
           "guard": true,
           "leash": 320
+        }
+      },
+      {
+        "monster": "mossback",
+        "x": 140,
+        "y": 1080,
+        "level": 2,
+        "ai": {
+          "aggro": "sound",
+          "range": 170
+        }
+      },
+      {
+        "monster": "shadepup",
+        "x": 780,
+        "y": 772,
+        "level": 2,
+        "ai": {
+          "aggro": "sight",
+          "range": 180
+        }
+      },
+      {
+        "monster": "shadepup",
+        "x": 636,
+        "y": 916,
+        "level": 2,
+        "ai": {
+          "aggro": "sight",
+          "range": 180
         }
       }
     ],
@@ -195,31 +205,45 @@
       {
         "id": "ch_forest_1",
         "x": 1050,
-        "y": 270,
+        "y": 180,
         "loot": "leather_armor",
         "lootKind": "armor"
       },
       {
         "id": "ch_forest_3",
-        "x": 180,
-        "y": 1090,
+        "x": 140,
+        "y": 300,
         "loot": "strength_brew",
         "lootKind": "item"
       },
       {
         "id": "ch_forest_2",
         "x": 1410,
-        "y": 190,
+        "y": 140,
         "loot": "frostbrand",
         "lootKind": "weapon",
         "requires": "grow_vines"
+      },
+      {
+        "id": "ch_forest_key",
+        "x": 1068,
+        "y": 1060,
+        "loot": "forest_key",
+        "lootKind": "item"
+      },
+      {
+        "id": "ch_forest_treasure",
+        "x": 348,
+        "y": 1060,
+        "loot": "heart_container",
+        "lootKind": "item"
       }
     ],
     "obstacles": [
       {
         "id": "ob_forest_vines",
-        "x": 1330,
-        "y": 300,
+        "x": 1340,
+        "y": 200,
         "requires": "grow_vines",
         "hintKey": "obstacle.vines"
       }
@@ -237,20 +261,247 @@
         "x": 800,
         "y": 80,
         "spawnX": 427,
-        "spawnY": 700
+        "spawnY": 700,
+        "requiresItem": "forest_key"
       },
       {
         "to": "mountain",
         "x": 1560,
         "y": 600,
         "spawnX": 80,
-        "spawnY": 600,
-        "requires": "build_bridges"
+        "spawnY": 600
       }
     ],
     "dungeon": "forest_dungeon",
     "mapX": 1,
-    "mapY": 0
+    "mapY": 0,
+    "terrain": [
+      {
+        "x": 1460,
+        "y": 0,
+        "w": 80,
+        "h": 500,
+        "type": "water"
+      },
+      {
+        "x": 1460,
+        "y": 500,
+        "w": 80,
+        "h": 200,
+        "type": "water",
+        "requires": "build_bridges"
+      },
+      {
+        "x": 1460,
+        "y": 700,
+        "w": 80,
+        "h": 500,
+        "type": "water"
+      },
+      {
+        "x": 240,
+        "y": 520,
+        "w": 216,
+        "h": 72,
+        "type": "hedge"
+      },
+      {
+        "x": 528,
+        "y": 520,
+        "w": 648,
+        "h": 72,
+        "type": "hedge"
+      },
+      {
+        "x": 240,
+        "y": 592,
+        "w": 72,
+        "h": 72,
+        "type": "hedge"
+      },
+      {
+        "x": 528,
+        "y": 592,
+        "w": 72,
+        "h": 72,
+        "type": "hedge"
+      },
+      {
+        "x": 960,
+        "y": 592,
+        "w": 72,
+        "h": 72,
+        "type": "hedge"
+      },
+      {
+        "x": 1104,
+        "y": 592,
+        "w": 72,
+        "h": 72,
+        "type": "hedge"
+      },
+      {
+        "x": 240,
+        "y": 664,
+        "w": 72,
+        "h": 72,
+        "type": "hedge"
+      },
+      {
+        "x": 384,
+        "y": 664,
+        "w": 216,
+        "h": 72,
+        "type": "hedge"
+      },
+      {
+        "x": 672,
+        "y": 664,
+        "w": 216,
+        "h": 72,
+        "type": "hedge"
+      },
+      {
+        "x": 960,
+        "y": 664,
+        "w": 72,
+        "h": 72,
+        "type": "hedge"
+      },
+      {
+        "x": 1104,
+        "y": 664,
+        "w": 72,
+        "h": 72,
+        "type": "hedge"
+      },
+      {
+        "x": 240,
+        "y": 736,
+        "w": 72,
+        "h": 72,
+        "type": "hedge"
+      },
+      {
+        "x": 672,
+        "y": 736,
+        "w": 72,
+        "h": 72,
+        "type": "hedge"
+      },
+      {
+        "x": 816,
+        "y": 736,
+        "w": 72,
+        "h": 72,
+        "type": "hedge"
+      },
+      {
+        "x": 1104,
+        "y": 736,
+        "w": 72,
+        "h": 72,
+        "type": "hedge"
+      },
+      {
+        "x": 240,
+        "y": 808,
+        "w": 504,
+        "h": 72,
+        "type": "hedge"
+      },
+      {
+        "x": 816,
+        "y": 808,
+        "w": 216,
+        "h": 72,
+        "type": "hedge"
+      },
+      {
+        "x": 1104,
+        "y": 808,
+        "w": 72,
+        "h": 72,
+        "type": "hedge"
+      },
+      {
+        "x": 240,
+        "y": 880,
+        "w": 72,
+        "h": 72,
+        "type": "hedge"
+      },
+      {
+        "x": 672,
+        "y": 880,
+        "w": 72,
+        "h": 72,
+        "type": "hedge"
+      },
+      {
+        "x": 1104,
+        "y": 880,
+        "w": 72,
+        "h": 72,
+        "type": "hedge"
+      },
+      {
+        "x": 240,
+        "y": 952,
+        "w": 72,
+        "h": 72,
+        "type": "hedge"
+      },
+      {
+        "x": 384,
+        "y": 952,
+        "w": 216,
+        "h": 72,
+        "type": "hedge"
+      },
+      {
+        "x": 672,
+        "y": 952,
+        "w": 72,
+        "h": 72,
+        "type": "hedge"
+      },
+      {
+        "x": 816,
+        "y": 952,
+        "w": 360,
+        "h": 72,
+        "type": "hedge"
+      },
+      {
+        "x": 240,
+        "y": 1024,
+        "w": 72,
+        "h": 72,
+        "type": "hedge"
+      },
+      {
+        "x": 528,
+        "y": 1024,
+        "w": 72,
+        "h": 72,
+        "type": "hedge"
+      },
+      {
+        "x": 1104,
+        "y": 1024,
+        "w": 72,
+        "h": 72,
+        "type": "hedge"
+      },
+      {
+        "x": 240,
+        "y": 1096,
+        "w": 936,
+        "h": 72,
+        "type": "hedge"
+      }
+    ]
   },
   {
     "id": "forest_dungeon",
@@ -265,61 +516,78 @@
     "spawns": [
       {
         "monster": "shadepup",
-        "x": 667,
-        "y": 375,
+        "x": 420,
+        "y": 700,
+        "level": 3,
+        "ai": {
+          "aggro": "sight",
+          "range": 280
+        }
+      },
+      {
+        "monster": "shadepup",
+        "x": 620,
+        "y": 730,
+        "level": 3,
+        "ai": {
+          "aggro": "sight",
+          "range": 280
+        }
+      },
+      {
+        "monster": "leafling",
+        "x": 900,
+        "y": 660,
+        "level": 3,
+        "ai": {
+          "aggro": "sight",
+          "range": 260
+        }
+      },
+      {
+        "monster": "shadepup",
+        "x": 300,
+        "y": 640,
         "level": 3,
         "ai": {
           "aggro": "sight",
           "range": 280,
           "patrol": [
             {
-              "x": 667,
-              "y": 375
+              "x": 300,
+              "y": 640
             },
             {
-              "x": 797,
-              "y": 445
+              "x": 220,
+              "y": 760
             },
             {
-              "x": 597,
-              "y": 505
+              "x": 400,
+              "y": 800
             }
           ]
         }
       },
       {
-        "monster": "leafling",
-        "x": 867,
-        "y": 562,
-        "level": 3,
-        "ai": {
-          "aggro": "sound",
-          "range": 150
-        }
+        "monster": "shadepup",
+        "x": 640,
+        "y": 580,
+        "level": 4,
+        "boss": true
       },
       {
         "monster": "leafling",
         "x": 640,
         "y": 200,
-        "level": 4,
+        "level": 5,
         "boss": true
-      },
-      {
-        "monster": "shadepup",
-        "x": 780,
-        "y": 560,
-        "level": 3,
-        "ai": {
-          "aggro": "sight",
-          "range": 260
-        }
       }
     ],
     "chests": [
       {
         "id": "ch_fdungeon_1",
-        "x": 267,
-        "y": 250,
+        "x": 220,
+        "y": 200,
         "loot": "heart_container",
         "lootKind": "item",
         "requires": "reveal_walls"
@@ -328,8 +596,8 @@
     "obstacles": [
       {
         "id": "ob_fdungeon_torch",
-        "x": 933,
-        "y": 250,
+        "x": 1040,
+        "y": 640,
         "requires": "light_torches",
         "hintKey": "obstacle.torch"
       }
@@ -347,35 +615,89 @@
       {
         "id": "forest_dungeon_runes",
         "type": "switches",
+        "ordered": true,
         "switches": [
           {
-            "x": 160,
-            "y": 170
+            "x": 280,
+            "y": 700,
+            "requires": "grow_vines"
           },
           {
-            "x": 170,
-            "y": 740
+            "x": 1000,
+            "y": 700,
+            "requires": "reveal_walls"
           },
           {
             "x": 640,
-            "y": 770,
+            "y": 300,
             "requires": "grow_vines"
           }
         ],
         "gate": {
-          "x": 1098,
-          "y": 147,
+          "x": 1058,
+          "y": 158,
           "w": 44,
           "h": 26
         },
         "reward": {
           "id": "forest_dungeon_vault",
-          "x": 1120,
-          "y": 160,
+          "x": 1080,
+          "y": 180,
           "loot": "kindred_charm",
           "lootKind": "item"
         },
         "hintKey": "puzzle.solved"
+      }
+    ],
+    "terrain": [
+      {
+        "x": 30,
+        "y": 30,
+        "w": 1220,
+        "h": 30,
+        "type": "wall"
+      },
+      {
+        "x": 30,
+        "y": 60,
+        "w": 30,
+        "h": 790,
+        "type": "wall"
+      },
+      {
+        "x": 1220,
+        "y": 60,
+        "w": 30,
+        "h": 790,
+        "type": "wall"
+      },
+      {
+        "x": 30,
+        "y": 840,
+        "w": 340,
+        "h": 30,
+        "type": "wall"
+      },
+      {
+        "x": 490,
+        "y": 840,
+        "w": 760,
+        "h": 30,
+        "type": "wall"
+      },
+      {
+        "x": 80,
+        "y": 480,
+        "w": 480,
+        "h": 24,
+        "type": "wall"
+      },
+      {
+        "x": 720,
+        "y": 480,
+        "w": 480,
+        "h": 24,
+        "type": "wall"
       }
     ]
   },
@@ -388,12 +710,18 @@
     "width": 1600,
     "height": 1200,
     "safe": false,
-    "npcs": [],
+    "npcs": [
+      {
+        "npc": "mountaineer",
+        "x": 260,
+        "y": 580
+      }
+    ],
     "spawns": [
       {
         "monster": "stoneback",
-        "x": 400,
-        "y": 400,
+        "x": 440,
+        "y": 560,
         "level": 4,
         "ai": {
           "aggro": "sight",
@@ -404,65 +732,64 @@
       },
       {
         "monster": "gustling",
-        "x": 800,
-        "y": 300,
+        "x": 540,
+        "y": 840,
         "level": 4,
         "ai": {
           "aggro": "sight",
           "range": 420,
           "patrol": [
             {
-              "x": 800,
-              "y": 300
+              "x": 540,
+              "y": 840
             },
             {
-              "x": 1050,
-              "y": 420
+              "x": 760,
+              "y": 960
             },
             {
-              "x": 650,
-              "y": 520
+              "x": 420,
+              "y": 980
             }
           ]
         }
       },
       {
         "monster": "sparkit",
-        "x": 1000,
-        "y": 700,
+        "x": 820,
+        "y": 360,
         "level": 5,
         "ai": {
           "aggro": "sight",
-          "range": 320
+          "range": 340
+        }
+      },
+      {
+        "monster": "sparkit",
+        "x": 920,
+        "y": 480,
+        "level": 5,
+        "ai": {
+          "aggro": "sight",
+          "range": 340
         }
       },
       {
         "monster": "stoneback",
-        "x": 1300,
-        "y": 1000,
-        "level": 6,
-        "boss": true,
-        "loot": {
-          "id": "stormpike",
-          "kind": "weapon"
-        }
-      },
-      {
-        "monster": "stoneback",
-        "x": 1000,
-        "y": 260,
-        "level": 4,
+        "x": 780,
+        "y": 720,
+        "level": 5,
         "ai": {
           "aggro": "sight",
           "range": 260,
           "guard": true,
-          "leash": 320
+          "leash": 300
         }
       },
       {
         "monster": "gustling",
-        "x": 1320,
-        "y": 520,
+        "x": 1150,
+        "y": 360,
         "level": 5,
         "ai": {
           "aggro": "sight",
@@ -470,47 +797,72 @@
         }
       },
       {
+        "monster": "stoneback",
+        "x": 1300,
+        "y": 520,
+        "level": 6,
+        "boss": true,
+        "loot": {
+          "id": "heart_container",
+          "kind": "item"
+        }
+      },
+      {
         "monster": "sparkit",
-        "x": 600,
-        "y": 980,
+        "x": 1220,
+        "y": 660,
         "level": 5,
         "ai": {
           "aggro": "sight",
-          "range": 300
+          "range": 320,
+          "guard": true,
+          "leash": 320
+        }
+      },
+      {
+        "monster": "stoneback",
+        "x": 1400,
+        "y": 440,
+        "level": 5,
+        "ai": {
+          "aggro": "sight",
+          "range": 260,
+          "guard": true,
+          "leash": 320
         }
       }
     ],
     "chests": [
       {
+        "id": "ch_mountain_2",
+        "x": 1060,
+        "y": 280,
+        "loot": "iron_mail",
+        "lootKind": "armor"
+      },
+      {
+        "id": "ch_mountain_3",
+        "x": 200,
+        "y": 1080,
+        "loot": "swift_brew",
+        "lootKind": "item"
+      },
+      {
         "id": "ch_mountain_1",
-        "x": 1450,
-        "y": 250,
+        "x": 1430,
+        "y": 180,
         "loot": "stormpike",
         "lootKind": "weapon",
         "requires": "build_bridges"
-      },
-      {
-        "id": "ch_mountain_2",
-        "x": 300,
-        "y": 1050,
-        "loot": "iron_mail",
-        "lootKind": "armor"
       }
     ],
     "obstacles": [
       {
         "id": "ob_mountain_gap",
         "x": 1350,
-        "y": 350,
+        "y": 250,
         "requires": "build_bridges",
         "hintKey": "obstacle.gap"
-      },
-      {
-        "id": "ob_mountain_machine",
-        "x": 900,
-        "y": 900,
-        "requires": "activate_machines",
-        "hintKey": "obstacle.machine"
       }
     ],
     "exits": [
@@ -550,103 +902,126 @@
     "width": 1600,
     "height": 1200,
     "safe": false,
-    "npcs": [],
+    "npcs": [
+      {
+        "npc": "bogkeeper",
+        "x": 260,
+        "y": 520
+      }
+    ],
     "spawns": [
       {
         "monster": "frostkit",
-        "x": 500,
-        "y": 400,
+        "x": 440,
+        "y": 480,
         "level": 6,
         "ai": {
           "aggro": "sound",
-          "range": 160
+          "range": 180
+        }
+      },
+      {
+        "monster": "tidefin",
+        "x": 340,
+        "y": 820,
+        "level": 6,
+        "ai": {
+          "aggro": "sound",
+          "range": 220
+        }
+      },
+      {
+        "monster": "frostkit",
+        "x": 760,
+        "y": 540,
+        "level": 6,
+        "ai": {
+          "aggro": "sight",
+          "range": 320
+        }
+      },
+      {
+        "monster": "frostkit",
+        "x": 870,
+        "y": 460,
+        "level": 7,
+        "ai": {
+          "aggro": "sight",
+          "range": 320
         }
       },
       {
         "monster": "leafling",
-        "x": 800,
-        "y": 600,
+        "x": 700,
+        "y": 920,
         "level": 6,
         "ai": {
           "aggro": "sight",
           "range": 280,
           "patrol": [
             {
-              "x": 800,
-              "y": 600
+              "x": 700,
+              "y": 920
             },
             {
-              "x": 930,
-              "y": 670
+              "x": 880,
+              "y": 1000
             },
             {
-              "x": 730,
-              "y": 730
+              "x": 600,
+              "y": 1040
             }
           ]
         }
       },
       {
         "monster": "tidefin",
-        "x": 1100,
-        "y": 800,
+        "x": 1280,
+        "y": 580,
         "level": 7,
         "boss": true,
         "loot": {
-          "id": "tidescale",
-          "kind": "armor"
+          "id": "heart_container",
+          "kind": "item"
         }
       },
       {
         "monster": "frostkit",
-        "x": 1220,
-        "y": 500,
+        "x": 1170,
+        "y": 700,
         "level": 6,
         "ai": {
-          "aggro": "sound",
-          "range": 160
+          "aggro": "sight",
+          "range": 300,
+          "guard": true,
+          "leash": 320
         }
       },
       {
         "monster": "leafling",
-        "x": 980,
-        "y": 1010,
-        "level": 6,
+        "x": 1390,
+        "y": 640,
+        "level": 7,
         "ai": {
           "aggro": "sight",
           "range": 280,
-          "patrol": [
-            {
-              "x": 980,
-              "y": 1010
-            },
-            {
-              "x": 1110,
-              "y": 1090
-            },
-            {
-              "x": 900,
-              "y": 1130
-            }
-          ]
-        }
-      },
-      {
-        "monster": "frostkit",
-        "x": 380,
-        "y": 820,
-        "level": 6,
-        "ai": {
-          "aggro": "sight",
-          "range": 280
+          "guard": true,
+          "leash": 320
         }
       }
     ],
     "chests": [
       {
+        "id": "ch_swamp_2",
+        "x": 1450,
+        "y": 200,
+        "loot": "monster_tonic",
+        "lootKind": "item"
+      },
+      {
         "id": "ch_swamp_1",
-        "x": 1300,
-        "y": 300,
+        "x": 560,
+        "y": 900,
         "loot": "tidescale",
         "lootKind": "armor",
         "requires": "jump_water"
@@ -688,10 +1063,10 @@
     "dungeon": "swamp_dungeon",
     "terrain": [
       {
-        "x": 560,
-        "y": 880,
-        "w": 260,
-        "h": 150,
+        "x": 460,
+        "y": 840,
+        "w": 300,
+        "h": 170,
         "type": "water",
         "requires": "jump_water"
       }
@@ -708,12 +1083,18 @@
     "width": 1600,
     "height": 1200,
     "safe": false,
-    "npcs": [],
+    "npcs": [
+      {
+        "npc": "emberkeeper",
+        "x": 260,
+        "y": 680
+      }
+    ],
     "spawns": [
       {
         "monster": "cindertail",
-        "x": 500,
-        "y": 500,
+        "x": 440,
+        "y": 660,
         "level": 8,
         "ai": {
           "aggro": "sight",
@@ -722,75 +1103,98 @@
       },
       {
         "monster": "emberpup",
+        "x": 560,
+        "y": 920,
+        "level": 8,
+        "ai": {
+          "aggro": "sight",
+          "range": 320
+        }
+      },
+      {
+        "monster": "emberpup",
         "x": 800,
-        "y": 350,
+        "y": 420,
         "level": 8,
         "ai": {
           "aggro": "sight",
-          "range": 320
+          "range": 340
         }
       },
       {
         "monster": "cindertail",
-        "x": 1200,
-        "y": 900,
-        "level": 10,
-        "boss": true,
-        "loot": {
-          "id": "emberplate",
-          "kind": "armor"
+        "x": 900,
+        "y": 540,
+        "level": 8,
+        "ai": {
+          "aggro": "sight",
+          "range": 340
         }
       },
       {
         "monster": "emberpup",
-        "x": 1120,
-        "y": 300,
-        "level": 8,
-        "ai": {
-          "aggro": "sight",
-          "range": 320
-        }
-      },
-      {
-        "monster": "cindertail",
-        "x": 400,
-        "y": 980,
-        "level": 8,
-        "ai": {
-          "aggro": "sight",
-          "range": 380
-        }
-      },
-      {
-        "monster": "emberpup",
-        "x": 1360,
-        "y": 660,
+        "x": 1150,
+        "y": 340,
         "level": 9,
         "ai": {
           "aggro": "sight",
           "range": 320
         }
+      },
+      {
+        "monster": "cindertail",
+        "x": 1280,
+        "y": 520,
+        "level": 10,
+        "boss": true,
+        "loot": {
+          "id": "heart_container",
+          "kind": "item"
+        }
+      },
+      {
+        "monster": "emberpup",
+        "x": 1180,
+        "y": 660,
+        "level": 9,
+        "ai": {
+          "aggro": "sight",
+          "range": 320,
+          "guard": true,
+          "leash": 320
+        }
+      },
+      {
+        "monster": "cindertail",
+        "x": 1390,
+        "y": 440,
+        "level": 9,
+        "ai": {
+          "aggro": "sight",
+          "range": 380,
+          "guard": true,
+          "leash": 320
+        }
       }
     ],
     "chests": [
       {
+        "id": "ch_volcano_2",
+        "x": 220,
+        "y": 260,
+        "loot": "health_potion",
+        "lootKind": "item"
+      },
+      {
         "id": "ch_volcano_1",
-        "x": 300,
-        "y": 300,
+        "x": 1380,
+        "y": 200,
         "loot": "emberplate",
         "lootKind": "armor",
         "requires": "dig_tunnels"
       }
     ],
-    "obstacles": [
-      {
-        "id": "ob_volcano_rocks",
-        "x": 900,
-        "y": 600,
-        "requires": "smash_rocks",
-        "hintKey": "obstacle.rocks"
-      }
-    ],
+    "obstacles": [],
     "exits": [
       {
         "to": "swamp",
@@ -817,12 +1221,26 @@
     "dungeon": "volcano_dungeon",
     "terrain": [
       {
-        "x": 480,
-        "y": 730,
-        "w": 240,
-        "h": 150,
+        "x": 1460,
+        "y": 0,
+        "w": 80,
+        "h": 300,
+        "type": "lava"
+      },
+      {
+        "x": 1460,
+        "y": 300,
+        "w": 80,
+        "h": 200,
         "type": "lava",
         "requires": "build_bridges"
+      },
+      {
+        "x": 1460,
+        "y": 500,
+        "w": 80,
+        "h": 700,
+        "type": "lava"
       }
     ],
     "mapX": 3,
@@ -837,103 +1255,126 @@
     "width": 1600,
     "height": 1200,
     "safe": false,
-    "npcs": [],
+    "npcs": [
+      {
+        "npc": "snowkeeper",
+        "x": 260,
+        "y": 420
+      }
+    ],
     "spawns": [
       {
         "monster": "frostkit",
-        "x": 500,
-        "y": 400,
+        "x": 440,
+        "y": 440,
         "level": 9,
         "ai": {
           "aggro": "sight",
-          "range": 280,
+          "range": 280
+        }
+      },
+      {
+        "monster": "gustling",
+        "x": 560,
+        "y": 760,
+        "level": 9,
+        "ai": {
+          "aggro": "sight",
+          "range": 400,
           "patrol": [
             {
-              "x": 500,
-              "y": 400
+              "x": 560,
+              "y": 760
             },
             {
-              "x": 630,
-              "y": 470
+              "x": 740,
+              "y": 840
             },
             {
-              "x": 430,
-              "y": 530
+              "x": 460,
+              "y": 880
             }
           ]
         }
       },
       {
-        "monster": "gustling",
-        "x": 900,
-        "y": 600,
+        "monster": "frostkit",
+        "x": 820,
+        "y": 460,
         "level": 9,
         "ai": {
           "aggro": "sight",
-          "range": 420
-        }
-      },
-      {
-        "monster": "frostkit",
-        "x": 1200,
-        "y": 900,
-        "level": 11,
-        "boss": true,
-        "loot": {
-          "id": "frostbrand",
-          "kind": "weapon"
+          "range": 320
         }
       },
       {
         "monster": "gustling",
-        "x": 520,
-        "y": 820,
-        "level": 9,
-        "ai": {
-          "aggro": "sight",
-          "range": 400
-        }
-      },
-      {
-        "monster": "frostkit",
-        "x": 1260,
-        "y": 300,
-        "level": 10,
-        "ai": {
-          "aggro": "sight",
-          "range": 280,
-          "patrol": [
-            {
-              "x": 1260,
-              "y": 300
-            },
-            {
-              "x": 1390,
-              "y": 380
-            },
-            {
-              "x": 1180,
-              "y": 420
-            }
-          ]
-        }
-      },
-      {
-        "monster": "gustling",
-        "x": 940,
-        "y": 1060,
+        "x": 920,
+        "y": 560,
         "level": 10,
         "ai": {
           "aggro": "sight",
           "range": 360
         }
+      },
+      {
+        "monster": "frostkit",
+        "x": 1150,
+        "y": 360,
+        "level": 10,
+        "ai": {
+          "aggro": "sight",
+          "range": 280
+        }
+      },
+      {
+        "monster": "frostkit",
+        "x": 1280,
+        "y": 560,
+        "level": 11,
+        "boss": true,
+        "loot": {
+          "id": "heart_container",
+          "kind": "item"
+        }
+      },
+      {
+        "monster": "gustling",
+        "x": 1180,
+        "y": 680,
+        "level": 10,
+        "ai": {
+          "aggro": "sight",
+          "range": 360,
+          "guard": true,
+          "leash": 320
+        }
+      },
+      {
+        "monster": "frostkit",
+        "x": 1390,
+        "y": 460,
+        "level": 10,
+        "ai": {
+          "aggro": "sight",
+          "range": 280,
+          "guard": true,
+          "leash": 320
+        }
       }
     ],
     "chests": [
       {
+        "id": "ch_snow_2",
+        "x": 220,
+        "y": 1080,
+        "loot": "mana_potion",
+        "lootKind": "item"
+      },
+      {
         "id": "ch_snow_1",
-        "x": 1400,
-        "y": 250,
+        "x": 1390,
+        "y": 190,
         "loot": "sunfire_staff",
         "lootKind": "weapon",
         "requires": "illuminate_dark"
@@ -942,8 +1383,8 @@
     "obstacles": [
       {
         "id": "ob_snow_dark",
-        "x": 700,
-        "y": 400,
+        "x": 1330,
+        "y": 240,
         "requires": "illuminate_dark",
         "hintKey": "obstacle.dark"
       }
@@ -961,8 +1402,7 @@
         "x": 1560,
         "y": 600,
         "spawnX": 80,
-        "spawnY": 600,
-        "requires": "freeze_water"
+        "spawnY": 600
       },
       {
         "to": "snow_dungeon",
@@ -974,7 +1414,31 @@
     ],
     "dungeon": "snow_dungeon",
     "mapX": 2,
-    "mapY": 1
+    "mapY": 1,
+    "terrain": [
+      {
+        "x": 1460,
+        "y": 0,
+        "w": 80,
+        "h": 500,
+        "type": "water"
+      },
+      {
+        "x": 1460,
+        "y": 500,
+        "w": 80,
+        "h": 200,
+        "type": "water",
+        "requires": "freeze_water"
+      },
+      {
+        "x": 1460,
+        "y": 700,
+        "w": 80,
+        "h": 500,
+        "type": "water"
+      }
+    ]
   },
   {
     "id": "ruins",
@@ -985,35 +1449,59 @@
     "width": 1600,
     "height": 1200,
     "safe": false,
-    "npcs": [],
+    "npcs": [
+      {
+        "npc": "ruinkeeper",
+        "x": 260,
+        "y": 600
+      }
+    ],
     "spawns": [
       {
-        "monster": "shadepup",
-        "x": 500,
-        "y": 400,
+        "monster": "lumenmoth",
+        "x": 440,
+        "y": 560,
         "level": 10,
         "ai": {
           "aggro": "sight",
-          "range": 260,
+          "range": 300
+        }
+      },
+      {
+        "monster": "shadepup",
+        "x": 560,
+        "y": 840,
+        "level": 10,
+        "ai": {
+          "aggro": "sight",
+          "range": 280,
           "guard": true,
           "leash": 320
+        }
+      },
+      {
+        "monster": "shadepup",
+        "x": 800,
+        "y": 500,
+        "level": 11,
+        "ai": {
+          "aggro": "sight",
+          "range": 300
         }
       },
       {
         "monster": "sparkit",
         "x": 900,
-        "y": 600,
-        "level": 10,
+        "y": 620,
+        "level": 11,
         "ai": {
           "aggro": "sight",
-          "range": 260,
-          "guard": true,
-          "leash": 320
+          "range": 300
         }
       },
       {
         "monster": "lumenmoth",
-        "x": 1100,
+        "x": 1150,
         "y": 400,
         "level": 11,
         "ai": {
@@ -1023,53 +1511,60 @@
       },
       {
         "monster": "shadepup",
-        "x": 1300,
-        "y": 950,
+        "x": 1280,
+        "y": 600,
         "level": 13,
         "boss": true,
         "loot": {
-          "id": "sunfire_staff",
-          "kind": "weapon"
+          "id": "heart_container",
+          "kind": "item"
         }
       },
       {
-        "monster": "shadepup",
-        "x": 600,
-        "y": 950,
+        "monster": "sparkit",
+        "x": 1180,
+        "y": 720,
         "level": 11,
         "ai": {
           "aggro": "sight",
-          "range": 260,
+          "range": 300,
           "guard": true,
           "leash": 320
         }
       },
       {
-        "monster": "sparkit",
-        "x": 1320,
-        "y": 720,
-        "level": 11,
-        "ai": {
-          "aggro": "sight",
-          "range": 300
-        }
-      },
-      {
-        "monster": "lumenmoth",
-        "x": 420,
+        "monster": "shadepup",
+        "x": 1390,
         "y": 520,
         "level": 11,
         "ai": {
           "aggro": "sight",
-          "range": 300
+          "range": 280,
+          "guard": true,
+          "leash": 320
         }
       }
     ],
     "chests": [
       {
-        "id": "ch_ruins_1",
-        "x": 300,
+        "id": "ch_ruins_2",
+        "x": 220,
+        "y": 260,
+        "loot": "health_potion",
+        "lootKind": "item"
+      },
+      {
+        "id": "ch_ruins_3",
+        "x": 620,
         "y": 950,
+        "loot": "monster_tonic",
+        "lootKind": "item",
+        "requires": "reveal_walls"
+      },
+      {
+        "id": "ch_ruins_1",
+        "x": 1390,
+        "y": 200,
         "loot": "heart_container",
         "lootKind": "item",
         "requires": "charge_runes"
@@ -1077,18 +1572,18 @@
     ],
     "obstacles": [
       {
-        "id": "ob_ruins_runes",
-        "x": 800,
-        "y": 300,
-        "requires": "charge_runes",
-        "hintKey": "obstacle.runes"
-      },
-      {
         "id": "ob_ruins_wall",
-        "x": 1100,
-        "y": 800,
+        "x": 660,
+        "y": 860,
         "requires": "reveal_walls",
         "hintKey": "obstacle.wall"
+      },
+      {
+        "id": "ob_ruins_runes",
+        "x": 1330,
+        "y": 260,
+        "requires": "charge_runes",
+        "hintKey": "obstacle.runes"
       }
     ],
     "exits": [
@@ -1128,34 +1623,72 @@
     "width": 1600,
     "height": 1200,
     "safe": false,
-    "npcs": [],
+    "npcs": [
+      {
+        "npc": "castellan",
+        "x": 260,
+        "y": 600
+      }
+    ],
     "spawns": [
       {
         "monster": "auraling",
-        "x": 500,
-        "y": 500,
+        "x": 440,
+        "y": 560,
         "level": 12,
         "ai": {
           "aggro": "sight",
-          "range": 260,
+          "range": 300,
           "guard": true,
           "leash": 320
         }
       },
       {
         "monster": "sparkit",
-        "x": 900,
-        "y": 400,
+        "x": 560,
+        "y": 860,
         "level": 13,
         "ai": {
           "aggro": "sight",
-          "range": 400
+          "range": 380
+        }
+      },
+      {
+        "monster": "sparkit",
+        "x": 820,
+        "y": 460,
+        "level": 13,
+        "ai": {
+          "aggro": "sight",
+          "range": 360
+        }
+      },
+      {
+        "monster": "shadepup",
+        "x": 920,
+        "y": 580,
+        "level": 13,
+        "ai": {
+          "aggro": "sight",
+          "range": 300
         }
       },
       {
         "monster": "auraling",
-        "x": 1200,
-        "y": 950,
+        "x": 1150,
+        "y": 420,
+        "level": 14,
+        "ai": {
+          "aggro": "sight",
+          "range": 300,
+          "guard": true,
+          "leash": 320
+        }
+      },
+      {
+        "monster": "auraling",
+        "x": 1280,
+        "y": 600,
         "level": 15,
         "boss": true,
         "loot": {
@@ -1165,51 +1698,51 @@
       },
       {
         "monster": "sparkit",
-        "x": 600,
-        "y": 820,
-        "level": 13,
+        "x": 1180,
+        "y": 720,
+        "level": 14,
         "ai": {
           "aggro": "sight",
-          "range": 400
-        }
-      },
-      {
-        "monster": "shadepup",
-        "x": 1320,
-        "y": 360,
-        "level": 13,
-        "ai": {
-          "aggro": "sight",
-          "range": 260,
+          "range": 360,
           "guard": true,
           "leash": 320
         }
       },
       {
-        "monster": "sparkit",
-        "x": 1000,
-        "y": 1060,
-        "level": 13,
+        "monster": "shadepup",
+        "x": 1390,
+        "y": 540,
+        "level": 14,
         "ai": {
           "aggro": "sight",
-          "range": 350
+          "range": 300,
+          "guard": true,
+          "leash": 320
         }
       }
     ],
     "chests": [
       {
-        "id": "ch_castle_1",
-        "x": 300,
-        "y": 300,
+        "id": "ch_castle_2",
+        "x": 220,
+        "y": 260,
         "loot": "heart_container",
         "lootKind": "item"
+      },
+      {
+        "id": "ch_castle_1",
+        "x": 1390,
+        "y": 200,
+        "loot": "heart_container",
+        "lootKind": "item",
+        "requires": "activate_machines"
       }
     ],
     "obstacles": [
       {
         "id": "ob_castle_machine",
-        "x": 800,
-        "y": 700,
+        "x": 1330,
+        "y": 260,
         "requires": "activate_machines",
         "hintKey": "obstacle.machine"
       }
@@ -1247,8 +1780,8 @@
     "spawns": [
       {
         "monster": "stoneback",
-        "x": 640,
-        "y": 375,
+        "x": 300,
+        "y": 640,
         "level": 5,
         "ai": {
           "aggro": "sight",
@@ -1259,32 +1792,28 @@
       },
       {
         "monster": "gustling",
-        "x": 880,
-        "y": 550,
+        "x": 980,
+        "y": 640,
         "level": 5,
         "ai": {
           "aggro": "sight",
-          "range": 280,
-          "patrol": [
-            {
-              "x": 880,
-              "y": 550
-            },
-            {
-              "x": 1010,
-              "y": 620
-            },
-            {
-              "x": 810,
-              "y": 680
-            }
-          ]
+          "range": 280
+        }
+      },
+      {
+        "monster": "gustling",
+        "x": 500,
+        "y": 820,
+        "level": 6,
+        "ai": {
+          "aggro": "sight",
+          "range": 280
         }
       },
       {
         "monster": "sparkit",
-        "x": 320,
-        "y": 300,
+        "x": 640,
+        "y": 560,
         "level": 6,
         "boss": true
       },
@@ -1294,45 +1823,21 @@
         "y": 200,
         "level": 8,
         "boss": true
-      },
-      {
-        "monster": "gustling",
-        "x": 780,
-        "y": 440,
-        "level": 6,
-        "ai": {
-          "aggro": "sight",
-          "range": 280,
-          "patrol": [
-            {
-              "x": 780,
-              "y": 440
-            },
-            {
-              "x": 910,
-              "y": 520
-            },
-            {
-              "x": 700,
-              "y": 560
-            }
-          ]
-        }
       }
     ],
     "chests": [
       {
         "id": "ch_mdungeon_1",
-        "x": 267,
-        "y": 700,
+        "x": 220,
+        "y": 200,
         "loot": "kindred_charm",
         "lootKind": "item",
         "requires": "activate_machines"
       },
       {
         "id": "ch_mdungeon_key",
-        "x": 1000,
-        "y": 700,
+        "x": 180,
+        "y": 600,
         "loot": "dungeon_key",
         "lootKind": "item"
       }
@@ -1340,8 +1845,8 @@
     "obstacles": [
       {
         "id": "ob_mdungeon_rocks",
-        "x": 933,
-        "y": 275,
+        "x": 820,
+        "y": 820,
         "requires": "smash_rocks",
         "hintKey": "obstacle.rocks"
       }
@@ -1361,33 +1866,87 @@
         "type": "switches",
         "switches": [
           {
-            "x": 160,
-            "y": 170
+            "x": 280,
+            "y": 700,
+            "requires": "smash_rocks"
           },
           {
-            "x": 170,
-            "y": 740
+            "x": 1000,
+            "y": 700,
+            "requires": "grow_vines"
           },
           {
             "x": 640,
-            "y": 770,
+            "y": 300,
             "requires": "smash_rocks"
           }
         ],
         "gate": {
-          "x": 1098,
-          "y": 147,
+          "x": 1058,
+          "y": 158,
           "w": 44,
           "h": 26
         },
         "reward": {
           "id": "mountain_dungeon_vault",
-          "x": 1120,
-          "y": 160,
+          "x": 1080,
+          "y": 180,
           "loot": "gaia_maul",
           "lootKind": "weapon"
         },
-        "hintKey": "puzzle.solved"
+        "hintKey": "puzzle.solved",
+        "ordered": true
+      }
+    ],
+    "terrain": [
+      {
+        "x": 30,
+        "y": 30,
+        "w": 1220,
+        "h": 30,
+        "type": "wall"
+      },
+      {
+        "x": 30,
+        "y": 60,
+        "w": 30,
+        "h": 790,
+        "type": "wall"
+      },
+      {
+        "x": 1220,
+        "y": 60,
+        "w": 30,
+        "h": 790,
+        "type": "wall"
+      },
+      {
+        "x": 30,
+        "y": 840,
+        "w": 340,
+        "h": 30,
+        "type": "wall"
+      },
+      {
+        "x": 490,
+        "y": 840,
+        "w": 760,
+        "h": 30,
+        "type": "wall"
+      },
+      {
+        "x": 80,
+        "y": 480,
+        "w": 480,
+        "h": 24,
+        "type": "wall"
+      },
+      {
+        "x": 720,
+        "y": 480,
+        "w": 480,
+        "h": 24,
+        "type": "wall"
       }
     ]
   },
@@ -1404,8 +1963,8 @@
     "spawns": [
       {
         "monster": "leafling",
-        "x": 640,
-        "y": 375,
+        "x": 300,
+        "y": 640,
         "level": 6,
         "ai": {
           "aggro": "sound",
@@ -1414,32 +1973,28 @@
       },
       {
         "monster": "frostkit",
-        "x": 880,
-        "y": 550,
+        "x": 980,
+        "y": 640,
         "level": 6,
         "ai": {
           "aggro": "sight",
-          "range": 280,
-          "patrol": [
-            {
-              "x": 880,
-              "y": 550
-            },
-            {
-              "x": 1010,
-              "y": 620
-            },
-            {
-              "x": 810,
-              "y": 680
-            }
-          ]
+          "range": 280
+        }
+      },
+      {
+        "monster": "frostkit",
+        "x": 500,
+        "y": 820,
+        "level": 8,
+        "ai": {
+          "aggro": "sound",
+          "range": 150
         }
       },
       {
         "monster": "mossback",
-        "x": 320,
-        "y": 300,
+        "x": 640,
+        "y": 560,
         "level": 7,
         "boss": true
       },
@@ -1449,23 +2004,13 @@
         "y": 200,
         "level": 9,
         "boss": true
-      },
-      {
-        "monster": "frostkit",
-        "x": 780,
-        "y": 540,
-        "level": 8,
-        "ai": {
-          "aggro": "sound",
-          "range": 150
-        }
       }
     ],
     "chests": [
       {
         "id": "ch_sdungeon_1",
-        "x": 267,
-        "y": 700,
+        "x": 220,
+        "y": 200,
         "loot": "heart_container",
         "lootKind": "item",
         "requires": "freeze_water"
@@ -1474,8 +2019,8 @@
     "obstacles": [
       {
         "id": "ob_sdungeon_water",
-        "x": 933,
-        "y": 275,
+        "x": 820,
+        "y": 820,
         "requires": "jump_water",
         "hintKey": "obstacle.water"
       }
@@ -1495,33 +2040,87 @@
         "type": "switches",
         "switches": [
           {
-            "x": 160,
-            "y": 170
+            "x": 280,
+            "y": 700,
+            "requires": "jump_water"
           },
           {
-            "x": 170,
-            "y": 740
+            "x": 1000,
+            "y": 700,
+            "requires": "grow_vines"
           },
           {
             "x": 640,
-            "y": 770,
+            "y": 300,
             "requires": "jump_water"
           }
         ],
         "gate": {
-          "x": 1098,
-          "y": 147,
+          "x": 1058,
+          "y": 158,
           "w": 44,
           "h": 26
         },
         "reward": {
           "id": "swamp_dungeon_vault",
-          "x": 1120,
-          "y": 160,
+          "x": 1080,
+          "y": 180,
           "loot": "thornbow",
           "lootKind": "weapon"
         },
-        "hintKey": "puzzle.solved"
+        "hintKey": "puzzle.solved",
+        "ordered": true
+      }
+    ],
+    "terrain": [
+      {
+        "x": 30,
+        "y": 30,
+        "w": 1220,
+        "h": 30,
+        "type": "wall"
+      },
+      {
+        "x": 30,
+        "y": 60,
+        "w": 30,
+        "h": 790,
+        "type": "wall"
+      },
+      {
+        "x": 1220,
+        "y": 60,
+        "w": 30,
+        "h": 790,
+        "type": "wall"
+      },
+      {
+        "x": 30,
+        "y": 840,
+        "w": 340,
+        "h": 30,
+        "type": "wall"
+      },
+      {
+        "x": 490,
+        "y": 840,
+        "w": 760,
+        "h": 30,
+        "type": "wall"
+      },
+      {
+        "x": 80,
+        "y": 480,
+        "w": 480,
+        "h": 24,
+        "type": "wall"
+      },
+      {
+        "x": 720,
+        "y": 480,
+        "w": 480,
+        "h": 24,
+        "type": "wall"
       }
     ]
   },
@@ -1538,8 +2137,8 @@
     "spawns": [
       {
         "monster": "emberpup",
-        "x": 640,
-        "y": 375,
+        "x": 300,
+        "y": 640,
         "level": 8,
         "ai": {
           "aggro": "sight",
@@ -1548,8 +2147,8 @@
       },
       {
         "monster": "cindertail",
-        "x": 880,
-        "y": 550,
+        "x": 980,
+        "y": 640,
         "level": 8,
         "ai": {
           "aggro": "sight",
@@ -1557,9 +2156,19 @@
         }
       },
       {
+        "monster": "cindertail",
+        "x": 500,
+        "y": 820,
+        "level": 10,
+        "ai": {
+          "aggro": "sight",
+          "range": 340
+        }
+      },
+      {
         "monster": "mossback",
-        "x": 320,
-        "y": 300,
+        "x": 640,
+        "y": 560,
         "level": 9,
         "boss": true
       },
@@ -1569,23 +2178,13 @@
         "y": 200,
         "level": 11,
         "boss": true
-      },
-      {
-        "monster": "cindertail",
-        "x": 780,
-        "y": 500,
-        "level": 10,
-        "ai": {
-          "aggro": "sight",
-          "range": 340
-        }
       }
     ],
     "chests": [
       {
         "id": "ch_vdungeon_1",
-        "x": 267,
-        "y": 700,
+        "x": 220,
+        "y": 200,
         "loot": "heart_container",
         "lootKind": "item",
         "requires": "dig_tunnels"
@@ -1594,8 +2193,8 @@
     "obstacles": [
       {
         "id": "ob_vdungeon_torch",
-        "x": 933,
-        "y": 275,
+        "x": 820,
+        "y": 820,
         "requires": "light_torches",
         "hintKey": "obstacle.torch"
       }
@@ -1615,33 +2214,87 @@
         "type": "switches",
         "switches": [
           {
-            "x": 160,
-            "y": 170
+            "x": 280,
+            "y": 700,
+            "requires": "build_bridges"
           },
           {
-            "x": 170,
-            "y": 740
+            "x": 1000,
+            "y": 700,
+            "requires": "grow_vines"
           },
           {
             "x": 640,
-            "y": 770,
+            "y": 300,
             "requires": "build_bridges"
           }
         ],
         "gate": {
-          "x": 1098,
-          "y": 147,
+          "x": 1058,
+          "y": 158,
           "w": 44,
           "h": 26
         },
         "reward": {
           "id": "volcano_dungeon_vault",
-          "x": 1120,
-          "y": 160,
+          "x": 1080,
+          "y": 180,
           "loot": "cinderstaff",
           "lootKind": "weapon"
         },
-        "hintKey": "puzzle.solved"
+        "hintKey": "puzzle.solved",
+        "ordered": true
+      }
+    ],
+    "terrain": [
+      {
+        "x": 30,
+        "y": 30,
+        "w": 1220,
+        "h": 30,
+        "type": "wall"
+      },
+      {
+        "x": 30,
+        "y": 60,
+        "w": 30,
+        "h": 790,
+        "type": "wall"
+      },
+      {
+        "x": 1220,
+        "y": 60,
+        "w": 30,
+        "h": 790,
+        "type": "wall"
+      },
+      {
+        "x": 30,
+        "y": 840,
+        "w": 340,
+        "h": 30,
+        "type": "wall"
+      },
+      {
+        "x": 490,
+        "y": 840,
+        "w": 760,
+        "h": 30,
+        "type": "wall"
+      },
+      {
+        "x": 80,
+        "y": 480,
+        "w": 480,
+        "h": 24,
+        "type": "wall"
+      },
+      {
+        "x": 720,
+        "y": 480,
+        "w": 480,
+        "h": 24,
+        "type": "wall"
       }
     ]
   },
@@ -1658,32 +2311,18 @@
     "spawns": [
       {
         "monster": "frostkit",
-        "x": 640,
-        "y": 375,
+        "x": 300,
+        "y": 640,
         "level": 9,
         "ai": {
           "aggro": "sight",
-          "range": 280,
-          "patrol": [
-            {
-              "x": 640,
-              "y": 375
-            },
-            {
-              "x": 770,
-              "y": 445
-            },
-            {
-              "x": 570,
-              "y": 505
-            }
-          ]
+          "range": 280
         }
       },
       {
         "monster": "gustling",
-        "x": 880,
-        "y": 550,
+        "x": 980,
+        "y": 640,
         "level": 9,
         "ai": {
           "aggro": "sight",
@@ -1691,9 +2330,19 @@
         }
       },
       {
+        "monster": "gustling",
+        "x": 500,
+        "y": 820,
+        "level": 12,
+        "ai": {
+          "aggro": "sight",
+          "range": 360
+        }
+      },
+      {
         "monster": "sparkit",
-        "x": 320,
-        "y": 300,
+        "x": 640,
+        "y": 560,
         "level": 10,
         "boss": true
       },
@@ -1703,23 +2352,13 @@
         "y": 200,
         "level": 12,
         "boss": true
-      },
-      {
-        "monster": "gustling",
-        "x": 780,
-        "y": 520,
-        "level": 12,
-        "ai": {
-          "aggro": "sight",
-          "range": 360
-        }
       }
     ],
     "chests": [
       {
         "id": "ch_sndungeon_1",
-        "x": 267,
-        "y": 700,
+        "x": 220,
+        "y": 200,
         "loot": "heart_container",
         "lootKind": "item",
         "requires": "illuminate_dark"
@@ -1728,8 +2367,8 @@
     "obstacles": [
       {
         "id": "ob_sndungeon_dark",
-        "x": 933,
-        "y": 275,
+        "x": 820,
+        "y": 820,
         "requires": "illuminate_dark",
         "hintKey": "obstacle.dark"
       }
@@ -1749,33 +2388,87 @@
         "type": "switches",
         "switches": [
           {
-            "x": 160,
-            "y": 170
+            "x": 280,
+            "y": 700,
+            "requires": "freeze_water"
           },
           {
-            "x": 170,
-            "y": 740
+            "x": 1000,
+            "y": 700,
+            "requires": "grow_vines"
           },
           {
             "x": 640,
-            "y": 770,
+            "y": 300,
             "requires": "freeze_water"
           }
         ],
         "gate": {
-          "x": 1098,
-          "y": 147,
+          "x": 1058,
+          "y": 158,
           "w": 44,
           "h": 26
         },
         "reward": {
           "id": "snow_dungeon_vault",
-          "x": 1120,
-          "y": 160,
+          "x": 1080,
+          "y": 180,
           "loot": "heart_container",
           "lootKind": "item"
         },
-        "hintKey": "puzzle.solved"
+        "hintKey": "puzzle.solved",
+        "ordered": true
+      }
+    ],
+    "terrain": [
+      {
+        "x": 30,
+        "y": 30,
+        "w": 1220,
+        "h": 30,
+        "type": "wall"
+      },
+      {
+        "x": 30,
+        "y": 60,
+        "w": 30,
+        "h": 790,
+        "type": "wall"
+      },
+      {
+        "x": 1220,
+        "y": 60,
+        "w": 30,
+        "h": 790,
+        "type": "wall"
+      },
+      {
+        "x": 30,
+        "y": 840,
+        "w": 340,
+        "h": 30,
+        "type": "wall"
+      },
+      {
+        "x": 490,
+        "y": 840,
+        "w": 760,
+        "h": 30,
+        "type": "wall"
+      },
+      {
+        "x": 80,
+        "y": 480,
+        "w": 480,
+        "h": 24,
+        "type": "wall"
+      },
+      {
+        "x": 720,
+        "y": 480,
+        "w": 480,
+        "h": 24,
+        "type": "wall"
       }
     ]
   },
@@ -1792,8 +2485,8 @@
     "spawns": [
       {
         "monster": "shadepup",
-        "x": 640,
-        "y": 375,
+        "x": 300,
+        "y": 640,
         "level": 11,
         "ai": {
           "aggro": "sight",
@@ -1804,8 +2497,8 @@
       },
       {
         "monster": "lumenmoth",
-        "x": 880,
-        "y": 550,
+        "x": 980,
+        "y": 640,
         "level": 11,
         "ai": {
           "aggro": "sight",
@@ -1815,9 +2508,21 @@
         }
       },
       {
+        "monster": "lumenmoth",
+        "x": 500,
+        "y": 820,
+        "level": 11,
+        "ai": {
+          "aggro": "sight",
+          "range": 260,
+          "guard": true,
+          "leash": 300
+        }
+      },
+      {
         "monster": "sparkit",
-        "x": 320,
-        "y": 300,
+        "x": 640,
+        "y": 560,
         "level": 12,
         "boss": true
       },
@@ -1827,25 +2532,13 @@
         "y": 200,
         "level": 14,
         "boss": true
-      },
-      {
-        "monster": "lumenmoth",
-        "x": 780,
-        "y": 500,
-        "level": 11,
-        "ai": {
-          "aggro": "sight",
-          "range": 260,
-          "guard": true,
-          "leash": 300
-        }
       }
     ],
     "chests": [
       {
         "id": "ch_rdungeon_1",
-        "x": 267,
-        "y": 700,
+        "x": 220,
+        "y": 200,
         "loot": "gale_edge",
         "lootKind": "weapon",
         "requires": "reveal_walls"
@@ -1854,8 +2547,8 @@
     "obstacles": [
       {
         "id": "ob_rdungeon_runes",
-        "x": 933,
-        "y": 275,
+        "x": 820,
+        "y": 820,
         "requires": "charge_runes",
         "hintKey": "obstacle.runes"
       }
@@ -1875,33 +2568,87 @@
         "type": "switches",
         "switches": [
           {
-            "x": 160,
-            "y": 170
+            "x": 280,
+            "y": 700,
+            "requires": "reveal_walls"
           },
           {
-            "x": 170,
-            "y": 740
+            "x": 1000,
+            "y": 700,
+            "requires": "grow_vines"
           },
           {
             "x": 640,
-            "y": 770,
+            "y": 300,
             "requires": "reveal_walls"
           }
         ],
         "gate": {
-          "x": 1098,
-          "y": 147,
+          "x": 1058,
+          "y": 158,
           "w": 44,
           "h": 26
         },
         "reward": {
           "id": "ruins_dungeon_vault",
-          "x": 1120,
-          "y": 160,
+          "x": 1080,
+          "y": 180,
           "loot": "wraithcloak",
           "lootKind": "armor"
         },
-        "hintKey": "puzzle.solved"
+        "hintKey": "puzzle.solved",
+        "ordered": true
+      }
+    ],
+    "terrain": [
+      {
+        "x": 30,
+        "y": 30,
+        "w": 1220,
+        "h": 30,
+        "type": "wall"
+      },
+      {
+        "x": 30,
+        "y": 60,
+        "w": 30,
+        "h": 790,
+        "type": "wall"
+      },
+      {
+        "x": 1220,
+        "y": 60,
+        "w": 30,
+        "h": 790,
+        "type": "wall"
+      },
+      {
+        "x": 30,
+        "y": 840,
+        "w": 340,
+        "h": 30,
+        "type": "wall"
+      },
+      {
+        "x": 490,
+        "y": 840,
+        "w": 760,
+        "h": 30,
+        "type": "wall"
+      },
+      {
+        "x": 80,
+        "y": 480,
+        "w": 480,
+        "h": 24,
+        "type": "wall"
+      },
+      {
+        "x": 720,
+        "y": 480,
+        "w": 480,
+        "h": 24,
+        "type": "wall"
       }
     ]
   },
@@ -1918,8 +2665,8 @@
     "spawns": [
       {
         "monster": "sparkit",
-        "x": 640,
-        "y": 375,
+        "x": 300,
+        "y": 640,
         "level": 13,
         "ai": {
           "aggro": "sight",
@@ -1930,8 +2677,18 @@
       },
       {
         "monster": "auraling",
-        "x": 880,
-        "y": 550,
+        "x": 980,
+        "y": 640,
+        "level": 13,
+        "ai": {
+          "aggro": "sight",
+          "range": 360
+        }
+      },
+      {
+        "monster": "sparkit",
+        "x": 500,
+        "y": 820,
         "level": 13,
         "ai": {
           "aggro": "sight",
@@ -1940,8 +2697,8 @@
       },
       {
         "monster": "shadepup",
-        "x": 320,
-        "y": 300,
+        "x": 640,
+        "y": 560,
         "level": 14,
         "boss": true
       },
@@ -1951,31 +2708,21 @@
         "y": 200,
         "level": 16,
         "boss": true
-      },
-      {
-        "monster": "sparkit",
-        "x": 780,
-        "y": 540,
-        "level": 13,
-        "ai": {
-          "aggro": "sight",
-          "range": 360
-        }
       }
     ],
     "chests": [
       {
         "id": "ch_cdungeon_1",
-        "x": 267,
-        "y": 700,
+        "x": 220,
+        "y": 200,
         "loot": "umbral_blade",
         "lootKind": "weapon",
         "requires": "charge_runes"
       },
       {
         "id": "ch_cdungeon_vault",
-        "x": 1000,
-        "y": 250,
+        "x": 440,
+        "y": 260,
         "loot": "heart_container",
         "lootKind": "item",
         "requiresItem": "dungeon_key"
@@ -1984,8 +2731,8 @@
     "obstacles": [
       {
         "id": "ob_cdungeon_machine",
-        "x": 933,
-        "y": 275,
+        "x": 820,
+        "y": 820,
         "requires": "activate_machines",
         "hintKey": "obstacle.machine"
       }
@@ -2005,33 +2752,87 @@
         "type": "switches",
         "switches": [
           {
-            "x": 160,
-            "y": 170
+            "x": 280,
+            "y": 700,
+            "requires": "charge_runes"
           },
           {
-            "x": 170,
-            "y": 740
+            "x": 1000,
+            "y": 700,
+            "requires": "grow_vines"
           },
           {
             "x": 640,
-            "y": 770,
+            "y": 300,
             "requires": "charge_runes"
           }
         ],
         "gate": {
-          "x": 1098,
-          "y": 147,
+          "x": 1058,
+          "y": 158,
           "w": 44,
           "h": 26
         },
         "reward": {
           "id": "castle_dungeon_vault",
-          "x": 1120,
-          "y": 160,
+          "x": 1080,
+          "y": 180,
           "loot": "gildedplate",
           "lootKind": "armor"
         },
-        "hintKey": "puzzle.solved"
+        "hintKey": "puzzle.solved",
+        "ordered": true
+      }
+    ],
+    "terrain": [
+      {
+        "x": 30,
+        "y": 30,
+        "w": 1220,
+        "h": 30,
+        "type": "wall"
+      },
+      {
+        "x": 30,
+        "y": 60,
+        "w": 30,
+        "h": 790,
+        "type": "wall"
+      },
+      {
+        "x": 1220,
+        "y": 60,
+        "w": 30,
+        "h": 790,
+        "type": "wall"
+      },
+      {
+        "x": 30,
+        "y": 840,
+        "w": 340,
+        "h": 30,
+        "type": "wall"
+      },
+      {
+        "x": 490,
+        "y": 840,
+        "w": 760,
+        "h": 30,
+        "type": "wall"
+      },
+      {
+        "x": 80,
+        "y": 480,
+        "w": 480,
+        "h": 24,
+        "type": "wall"
+      },
+      {
+        "x": 720,
+        "y": 480,
+        "w": 480,
+        "h": 24,
+        "type": "wall"
       }
     ]
   }

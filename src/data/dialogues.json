@@ -64,5 +64,89 @@
         "textKey": "dialogue.forager.3"
       }
     ]
+  },
+  {
+    "id": "dlg_mountaineer",
+    "lines": [
+      {
+        "textKey": "dialogue.mountaineer.1"
+      },
+      {
+        "textKey": "dialogue.mountaineer.2"
+      },
+      {
+        "textKey": "dialogue.mountaineer.3"
+      }
+    ]
+  },
+  {
+    "id": "dlg_bogkeeper",
+    "lines": [
+      {
+        "textKey": "dialogue.bogkeeper.1"
+      },
+      {
+        "textKey": "dialogue.bogkeeper.2"
+      },
+      {
+        "textKey": "dialogue.bogkeeper.3"
+      }
+    ]
+  },
+  {
+    "id": "dlg_emberkeeper",
+    "lines": [
+      {
+        "textKey": "dialogue.emberkeeper.1"
+      },
+      {
+        "textKey": "dialogue.emberkeeper.2"
+      },
+      {
+        "textKey": "dialogue.emberkeeper.3"
+      }
+    ]
+  },
+  {
+    "id": "dlg_snowkeeper",
+    "lines": [
+      {
+        "textKey": "dialogue.snowkeeper.1"
+      },
+      {
+        "textKey": "dialogue.snowkeeper.2"
+      },
+      {
+        "textKey": "dialogue.snowkeeper.3"
+      }
+    ]
+  },
+  {
+    "id": "dlg_ruinkeeper",
+    "lines": [
+      {
+        "textKey": "dialogue.ruinkeeper.1"
+      },
+      {
+        "textKey": "dialogue.ruinkeeper.2"
+      },
+      {
+        "textKey": "dialogue.ruinkeeper.3"
+      }
+    ]
+  },
+  {
+    "id": "dlg_castellan",
+    "lines": [
+      {
+        "textKey": "dialogue.castellan.1"
+      },
+      {
+        "textKey": "dialogue.castellan.2"
+      },
+      {
+        "textKey": "dialogue.castellan.3"
+      }
+    ]
   }
 ]
