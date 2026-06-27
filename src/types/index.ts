@@ -245,6 +245,8 @@ export interface SpawnPoint {
   boss?: boolean;
   /** sjeldent utstyr som slippes når bossen beseires (spec kap. 28) */
   loot?: { id: string; kind: 'item' | 'weapon' | 'armor' };
+  /** den siste bossen - utløser seiers-øyeblikk når den beseires (spec kap. 36) */
+  finalBoss?: boolean;
   /** bevegelses-/oppdagelsesmønster (spec kap. 17) */
   ai?: EnemyAI;
 }
@@ -423,6 +425,8 @@ export interface ProfileData {
   visitedZones?: string[];
   /** nøkler (`sone:mål`) på dører som er låst opp permanent med en nøkkel (Zelda-stil) */
   unlockedDoors?: string[];
+  /** true når den siste bossen er beseiret (spec kap. 36) */
+  victory?: boolean;
   /** spawn-nøkkel (`sone#index`) -> tidspunkt beseiret, for respawn-nedkjøling */
   defeatedSpawns?: Record<string, number>;
   /** quest-id -> framdrift */

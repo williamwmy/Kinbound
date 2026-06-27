@@ -339,5 +339,6 @@
   "quest.reach_ruins.title": "De gamle ruinene",
   "quest.reach_ruins.desc": "Utforsk de eldgamle ruinene.",
   "quest.reach_castle.title": "Det siste slottet",
-  "quest.reach_castle.desc": "Nå frem til slottet ved reisens ende."
+  "quest.reach_castle.desc": "Nå frem til slottet ved reisens ende.",
+  "victory.banner": "Du reddet Kinbound!\nFreden vender tilbake til landet."
 }

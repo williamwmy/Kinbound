@@ -171,6 +171,24 @@ export class UIScene extends Phaser.Scene {
     // Boss-helsestolpe
     on('boss:update', (d) => this.drawBossBar(d as { name: string; ratio: number; weak: boolean }));
     on('boss:hide', () => { this.bossBar?.setVisible(false); this.bossName?.setVisible(false); });
+    // Seiers-øyeblikk når siste boss er beseiret (spec kap. 36)
+    on('victory', () => this.showVictory());
+  }
+
+  private showVictory(): void {
+    const { width, height } = this.scale;
+    const banner = this.add
+      .text(width / 2, height / 2, t('victory.banner'), {
+        fontSize: '34px', color: '#ffe066', fontStyle: 'bold', align: 'center',
+        stroke: '#3a2a00', strokeThickness: 6, wordWrap: { width: width - 80 },
+      })
+      .setOrigin(0.5)
+      .setScrollFactor(0)
+      .setDepth(305)
+      .setAlpha(0)
+      .setScale(0.8);
+    this.tweens.add({ targets: banner, alpha: 1, scale: 1, duration: 600, ease: 'Back.Out' });
+    this.tweens.add({ targets: banner, alpha: 0, delay: 4200, duration: 800, onComplete: () => banner.destroy() });
   }
 
   private drawBossBar(d: { name: string; ratio: number; weak: boolean }): void {

@@ -283,6 +283,7 @@ export class WorldScene extends Phaser.Scene implements IWorld {
       const def = Data.monster(s.monster);
       const enemy = new Enemy(this, this, s.x, s.y, def, s.level, !!s.boss, s.loot, s.ai);
       enemy.setData('spawnKey', key);
+      if (s.finalBoss) enemy.setData('finalBoss', true);
       this.enemies.add(enemy);
       addIdleBob(this, enemy);
       // tydelig merke over kin man ikke eier fra før (spec kap. 14)
@@ -1419,6 +1420,11 @@ export class WorldScene extends Phaser.Scene implements IWorld {
       this.profile.gold += 50;
       EventBus.emit(Events.PlayerGoldChanged, this.profile.gold);
       if (enemy.loot) this.grantLoot(enemy.loot.id, enemy.loot.kind);
+      // Seiers-øyeblikk når den siste bossen faller (spec kap. 36)
+      if (enemy.getData('finalBoss') && !this.profile.victory) {
+        this.profile.victory = true;
+        EventBus.emit('victory');
+      }
       this.autosave();
     }
     this.markSpawnDefeated(enemy);

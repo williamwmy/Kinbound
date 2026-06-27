@@ -2707,7 +2707,8 @@
         "x": 640,
         "y": 200,
         "level": 16,
-        "boss": true
+        "boss": true,
+        "finalBoss": true
       }
     ],
     "chests": [

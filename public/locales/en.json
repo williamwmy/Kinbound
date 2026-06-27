@@ -339,5 +339,6 @@
   "quest.reach_ruins.title": "The Ancient Ruins",
   "quest.reach_ruins.desc": "Explore the ancient ruins.",
   "quest.reach_castle.title": "The Final Castle",
-  "quest.reach_castle.desc": "Reach the castle at the journey's end."
+  "quest.reach_castle.desc": "Reach the castle at the journey's end.",
+  "victory.banner": "You saved Kinbound!\nPeace returns to the land."
 }
