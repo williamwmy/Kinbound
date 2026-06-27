@@ -1237,6 +1237,33 @@ export class WorldScene extends Phaser.Scene implements IWorld {
   /** Ability-spesifikk visuell effekt når et monster bruker utforskningsevnen. */
   // Vennskaps-effekt når et monster rekrutteres (spec kap. 14, 36): myk rosa glød,
   // svevende hjerter og glitter - et lite "ny venn"-øyeblikk.
+  /**
+   * Selvoppofrings-gjenoppliving (spec kap. 29, 36 «små øyeblikk»): følgesvennen
+   * brister i gyllent lys ved sin egen posisjon, og helten blinker gyllent
+   * tilbake til live. Speiler recruit/evolve/victory-effektene.
+   */
+  private reviveEffect(rx: number, ry: number): void {
+    // gyllent offer-brak ved følgesvennen
+    const burst = this.add.circle(rx, ry, 30, 0xffe066, 0.7).setDepth(20).setScale(0.3);
+    this.tweens.add({ targets: burst, scale: 2.2, alpha: 0, duration: 620, ease: 'Cubic.Out', onComplete: () => burst.destroy() });
+    // sjel som stiger oppover
+    const soul = this.add.circle(rx, ry, 7, 0xfff4c2, 0.95).setDepth(21);
+    this.tweens.add({ targets: soul, y: ry - 64, alpha: 0, scale: 0.4, duration: 760, ease: 'Sine.Out', onComplete: () => soul.destroy() });
+    for (let i = 0; i < 10; i++) {
+      const a = (Math.PI * 2 * i) / 10 + Math.random() * 0.3;
+      const spark = this.add.circle(rx, ry, 2 + Math.random() * 2, 0xffe89a, 1).setDepth(21);
+      this.tweens.add({
+        targets: spark, x: rx + Math.cos(a) * (30 + Math.random() * 22), y: ry + Math.sin(a) * (30 + Math.random() * 22),
+        alpha: 0, scale: 0.2, duration: 600, ease: 'Cubic.Out', onComplete: () => spark.destroy(),
+      });
+    }
+    // helten blinker gyllent tilbake til live + en gyllen puls-ring
+    this.player.setTint(0xffe066);
+    this.time.delayedCall(420, () => this.player.clearTint());
+    const ring = this.add.circle(this.player.x, this.player.y, 22, 0xffe066, 0).setDepth(19).setStrokeStyle(3, 0xffe066, 0.9);
+    this.tweens.add({ targets: ring, scale: 2.6, alpha: 0, duration: 560, ease: 'Cubic.Out', onComplete: () => ring.destroy() });
+  }
+
   private recruitEffect(x: number, y: number): void {
     // rosa glød-ring
     const ring = this.add.circle(x, y, 40, 0xff9ab0, 0.5).setDepth(16).setScale(0.3);
@@ -1454,10 +1481,14 @@ export class WorldScene extends Phaser.Scene implements IWorld {
       (c) => c.isAlive() && Data.monster(c.owned.speciesId).revivePassive,
     );
     if (reviver) {
+      const rx = reviver.x;
+      const ry = reviver.y;
       reviver.takeDamage(99999);
       this.profile.currentHp = Math.round(SaveManager.computeMaxHp() * 0.5);
       EventBus.emit(Events.PlayerHpChanged, this.profile.currentHp, SaveManager.computeMaxHp());
       EventBus.emit(Events.Toast, t('gameover.revive', { name: t(reviver.def.nameKey) }));
+      this.reviveEffect(rx, ry);
+      EventBus.emit('player:revived'); // stigende «andre vind»-jingle (spec kap. 29, 36)
       return;
     }
     this.paused = true;

@@ -58,6 +58,8 @@ class AudioManagerImpl {
     EventBus.on(Events.MonsterEvolved, () => this.jingle([330, 415, 523, 659], 'sawtooth'));
     EventBus.on(Events.MonsterFainted, () => this.sfx('faint'));
     EventBus.on(Events.PlayerDied, () => this.jingle([294, 233, 175], 'square'));
+    // selvoppofrings-gjenoppliving: stigende, varm «andre vind» (spec kap. 29)
+    EventBus.on('player:revived', () => this.jingle([392, 523, 659, 880], 'triangle'));
     EventBus.on(Events.Saved, () => this.sfx('save'));
     EventBus.on('victory', () => this.jingle([523, 659, 784, 1047, 784, 1047], 'triangle'));
   }
