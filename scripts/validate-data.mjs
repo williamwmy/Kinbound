@@ -179,6 +179,41 @@ for (const e of elements) {
   for (const w of e.weakAgainst || []) ref(c, w, elementIds, 'weakAgainst-element');
 }
 
+// --- progresjons-/soft-lock-sjekk ------------------------------------------
+// Soneporter (requires) og dungeon-puslespill-brytere gater FRAMDRIFT/vault, så
+// evnene de krever MÅ kunne skaffes innen man kommer dit. (Hindringer og
+// hemmelige kister kan kreve senere evner = bevisst «kom tilbake»-innhold.)
+const MAIN_ORDER = ['village', 'forest', 'mountain', 'swamp', 'volcano', 'snow', 'ruins', 'castle'];
+const abilityOf = Object.fromEntries(monsters.map((m) => [m.id, m.explorationAbility]));
+const zoneById = new Map(zones.map((z) => [z.id, z]));
+const zoneAbilities = (zid) => {
+  const set = new Set();
+  for (const id of [zid, `${zid}_dungeon`]) {
+    const z = zoneById.get(id);
+    if (z) for (const s of z.spawns || []) if (!s.boss && abilityOf[s.monster]) set.add(abilityOf[s.monster]);
+  }
+  return set;
+};
+const obtainableBy = {};
+const cum = new Set();
+for (const zid of MAIN_ORDER) {
+  for (const a of zoneAbilities(zid)) cum.add(a);
+  obtainableBy[zid] = new Set(cum);
+}
+for (const zid of MAIN_ORDER) {
+  const reachable = obtainableBy[zid];
+  const ov = zoneById.get(zid);
+  for (const e of ov.exits || []) {
+    if (e.requires && !reachable.has(e.requires)) err(`progresjon:${zid}.exit->${e.to}`, `SOFT-LOCK: porten krever "${e.requires}" som ikke kan skaffes innen ${zid}`);
+  }
+  const dun = zoneById.get(`${zid}_dungeon`);
+  for (const pz of dun?.puzzles || []) {
+    for (const sw of pz.switches || []) {
+      if (sw.requires && !reachable.has(sw.requires)) err(`progresjon:${zid}_dungeon.puzzle`, `SOFT-LOCK: bryter krever "${sw.requires}" som ikke kan skaffes innen ${zid} (vault uoppnåelig)`);
+    }
+  }
+}
+
 // --- rapport ---------------------------------------------------------------
 const counts = `${monsters.length} monstre, ${weapons.length} våpen, ${armor.length} rustninger, ${items.length} items, ${npcs.length} NPC-er, ${zones.length} soner, ${quests.length} oppdrag, ${dialogues.length} dialoger, ${elements.length} elementer`;
 if (errors.length === 0) {
