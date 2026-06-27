@@ -49,6 +49,15 @@ const game = new Phaser.Game({
   ],
 });
 
+// Re-tilpass lerretet når iOS-verktøylinjen kollapser eller orientering endres,
+// så toppen/bunnen ikke havner utenfor synlig område (FIT + CENTER_BOTH).
+const refit = (): void => {
+  game.scale.refresh();
+};
+window.addEventListener('resize', refit);
+window.addEventListener('orientationchange', () => window.setTimeout(refit, 120));
+window.visualViewport?.addEventListener('resize', refit);
+
 // Eksponer for feilsøking/automatisert røyktest.
 (window as unknown as { __KIN_GAME: Phaser.Game }).__KIN_GAME = game;
 (window as unknown as { __KIN_AUDIO: typeof AudioManager }).__KIN_AUDIO = AudioManager;
