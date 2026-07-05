@@ -453,6 +453,38 @@ export const TextureFactory = {
       g.fillStyle(0xffc0d0, 0.95); g.fillCircle(5, 5, 1.6); // glanspunkt
     }, 18, 17);
 
+    // dyttbar stein + trykkplate (blocks-gåter, spec kap. 26)
+    make('push_block', (g) => {
+      g.fillStyle(0x5d5668, 1); // rund kampestein
+      g.fillCircle(19, 19, 17);
+      g.fillStyle(0x726a80, 1); // topplys
+      g.fillCircle(15, 14, 10);
+      g.fillStyle(0x453f52, 0.9); // bunn-skygge
+      g.fillCircle(23, 27, 8);
+      g.lineStyle(2, 0x36313f, 1);
+      g.strokeCircle(19, 19, 17);
+      // små sprekker så den leses som "stein som kan flyttes"
+      g.lineStyle(1.5, 0x36313f, 0.8);
+      g.beginPath(); g.moveTo(10, 22); g.lineTo(16, 19); g.strokePath();
+      g.beginPath(); g.moveTo(24, 10); g.lineTo(27, 16); g.strokePath();
+    }, 38, 38);
+    make('pressure_plate', (g) => {
+      g.fillStyle(0x2a2633, 1); // nedsenket ramme
+      g.fillRoundedRect(1, 1, 34, 34, 6);
+      g.fillStyle(0x4a4458, 1); // plate
+      g.fillRoundedRect(5, 5, 26, 26, 5);
+      g.lineStyle(2, 0xffe066, 0.8); // gyllen markering = "legg noe her"
+      g.strokeRoundedRect(8, 8, 20, 20, 4);
+    }, 36, 36);
+
+    // mynt (drops fra fiender - belønningsløkka i kamp)
+    make('coin', (g) => {
+      g.fillStyle(0xc9920e, 1); g.fillCircle(7, 7, 6.5); // mørk kant
+      g.fillStyle(0xffd23e, 1); g.fillCircle(7, 7, 5.2);
+      g.fillStyle(0xffec9a, 1); g.fillCircle(5, 5, 1.8); // glans
+      g.lineStyle(1.5, 0xc9920e, 0.9); g.strokeCircle(7, 7, 3);
+    }, 14, 14);
+
     // rune-bryter (puslespill, spec kap. 26) - rund stenplate med rune
     make(
       'rune',

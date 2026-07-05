@@ -351,10 +351,15 @@ export interface PuzzleSwitch {
  */
 export interface PuzzleDef {
   id: string;
-  type: 'switches';
-  /** hvis sant må bryterne aktiveres i rekkefølge (indeks 0,1,2 ...); feil rekkefølge nullstiller */
+  /** switches = runer som aktiveres; blocks = dyttbare steiner på trykkplater */
+  type: 'switches' | 'blocks';
+  /** hvis sant «synger» runene sekvensen sin (Simon-says); feil rekkefølge nullstiller */
   ordered?: boolean;
-  switches: PuzzleSwitch[];
+  switches?: PuzzleSwitch[];
+  /** dyttbare steiner (type 'blocks'): startposisjoner */
+  blocks?: { x: number; y: number }[];
+  /** trykkplater (type 'blocks'): alle må dekkes av en stein for å løse gåten */
+  plates?: { x: number; y: number }[];
   /** porten/forseglingen som åpnes når alle bryterne er aktive */
   gate: { x: number; y: number; w: number; h: number };
   /** belønningskiste som avdekkes når puslespillet løses */

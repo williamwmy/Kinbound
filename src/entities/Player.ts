@@ -22,6 +22,9 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Ally {
   private dirY = 1;
   private buffs: Buff[] = [];
   private invulnUntil = 0;
+  private lungeUntil = 0;
+  private inputX = 0;
+  private inputY = 0;
 
   constructor(scene: Phaser.Scene, world: IWorld, x: number, y: number, textureKey: string) {
     super(scene, x, y, textureKey);
@@ -38,6 +41,12 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Ally {
 
   // --- bevegelse ----------------------------------------------------------
   setMoveInput(vx: number, vy: number): void {
+    // rå input lagres FØR utfalls-guarden: dytting av steiner leser intensjonen,
+    // ikke faktisk fart (fysikken nuller farten mot statiske kropper)
+    this.inputX = vx;
+    this.inputY = vy;
+    // under et angreps-utfall bærer utfallsfarten (kampfølelse)
+    if (this.scene.time.now < this.lungeUntil) return;
     const speed = this.moveSpeed();
     this.setVelocity(vx * speed, vy * speed);
     if (vx !== 0 || vy !== 0) {
@@ -63,6 +72,23 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Ally {
     if (time - this.lastAttack < weapon.attackSpeed) return;
     this.lastAttack = time;
     const dmg = weapon.damage + this.buffTotal('damage');
+    const body = this.body as Phaser.Physics.Arcade.Body;
+    const standing = Math.abs(body.velocity.x) < 10 && Math.abs(body.velocity.y) < 10;
+    // sikte-hjelp: står du stille, vend deg automatisk mot nærmeste fiende
+    // (mobil-vennlig - du slipper å finsikte med joysticken)
+    const aimRange = Math.max(weapon.range * 2.2, 140);
+    const near = this.world.nearestEnemy(this.x, this.y, aimRange);
+    if (standing && near) {
+      const len = Math.hypot(near.x - this.x, near.y - this.y) || 1;
+      this.dirX = (near.x - this.x) / len;
+      this.dirY = (near.y - this.y) / len;
+    }
+    // nærkamps-utfall: et lite byks fremover gir slagene tyngde og driv
+    const melee = weapon.pattern !== 'projectile' && weapon.pattern !== 'spellburst';
+    if (melee) {
+      this.setVelocity(this.dirX * 240, this.dirY * 240);
+      this.lungeUntil = time + 110;
+    }
     this.world.spawnAttack({
       x: this.x + this.dirX * (weapon.range * 0.5),
       y: this.y + this.dirY * (weapon.range * 0.5),
@@ -152,5 +178,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Ally {
 
   getDir(): { x: number; y: number } {
     return { x: this.dirX, y: this.dirY };
+  }
+
+  /** Rå bevegelses-input (intensjon), uavhengig av fysikk-separasjon. */
+  getMoveInput(): { x: number; y: number } {
+    return { x: this.inputX, y: this.inputY };
   }
 }

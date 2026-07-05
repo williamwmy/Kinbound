@@ -340,5 +340,8 @@
   "quest.reach_ruins.desc": "Utforsk de eldgamle ruinene.",
   "quest.reach_castle.title": "Det siste slottet",
   "quest.reach_castle.desc": "Nå frem til slottet ved reisens ende.",
-  "victory.banner": "Du reddet Kinbound!\nFreden vender tilbake til landet."
+  "victory.banner": "Du reddet Kinbound!\nFreden vender tilbake til landet.",
+  "puzzle.watch": "Steinene synger! Se og lytt til rekkefølgen …",
+  "puzzle.push_hint": "Dytt steinene til platene for å bryte forseglingen!",
+  "puzzle.plate_down": "Platen klikker på plass!"
 }

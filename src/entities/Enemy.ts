@@ -130,8 +130,16 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite implements Damageable {
     let dmg = mitigate(amount, this.armor);
     if (weak) dmg = Math.round(dmg * 1.6);
     this.hp = Math.max(0, this.hp - dmg);
-    this.setTint(weak ? 0xffe066 : 0xffffff);
-    this.scene.time.delayedCall(80, () => this.active && this.clearTint());
+    // ekte hvit blink: multiplikativ hvit tint er en no-op, FILL-modus lyser opp
+    this.setTint(weak ? 0xffe066 : 0xffffff).setTintMode(Phaser.TintModes.FILL);
+    this.scene.time.delayedCall(70, () => {
+      if (!this.active) return;
+      this.clearTint();
+      this.setTintMode(Phaser.TintModes.MULTIPLY);
+    });
+    // liten "svetteskvett"-pop i skala så treffet kjennes fysisk
+    const base = this.isBoss ? 2.1 : 1.5;
+    this.scene.tweens.add({ targets: this, scale: base * 1.13, duration: 60, yoyo: true, onComplete: () => this.active && this.setScale(base) });
     if (this.isBoss) this.updateBossPhase();
     return dmg;
   }

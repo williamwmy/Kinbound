@@ -150,8 +150,15 @@ for (const z of zones) {
   for (const pz of z.puzzles || []) {
     const pc = `${c}.puzzle:${pz.id}`;
     if (!pz.gate) err(pc, 'puslespill mangler gate');
-    if (!Array.isArray(pz.switches) || pz.switches.length === 0) err(pc, 'puslespill mangler switches');
-    for (const sw of pz.switches || []) if (sw.requires && !validAbilities.has(sw.requires)) err(pc, `ukjent switch requires-evne: "${sw.requires}"`);
+    if (pz.type === 'blocks') {
+      // dyttestein-gåte: steiner + plater, ingen switches
+      if (!Array.isArray(pz.plates) || pz.plates.length === 0) err(pc, 'blocks-gåte mangler plates');
+      if (!Array.isArray(pz.blocks) || (pz.blocks?.length ?? 0) < (pz.plates?.length ?? 0))
+        err(pc, 'blocks-gåte trenger minst like mange blocks som plates');
+    } else {
+      if (!Array.isArray(pz.switches) || pz.switches.length === 0) err(pc, 'puslespill mangler switches');
+      for (const sw of pz.switches || []) if (sw.requires && !validAbilities.has(sw.requires)) err(pc, `ukjent switch requires-evne: "${sw.requires}"`);
+    }
     if (pz.reward) checkChest(`${pc}.reward`, pz.reward);
   }
 }

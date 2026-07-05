@@ -1887,24 +1887,7 @@
     "puzzles": [
       {
         "id": "mountain_dungeon_runes",
-        "type": "switches",
-        "switches": [
-          {
-            "x": 280,
-            "y": 700,
-            "requires": "smash_rocks"
-          },
-          {
-            "x": 1000,
-            "y": 700,
-            "requires": "grow_vines"
-          },
-          {
-            "x": 640,
-            "y": 300,
-            "requires": "smash_rocks"
-          }
-        ],
+        "type": "blocks",
         "gate": {
           "x": 1058,
           "y": 158,
@@ -1919,7 +1902,34 @@
           "lootKind": "weapon"
         },
         "hintKey": "puzzle.solved",
-        "ordered": true
+        "blocks": [
+          {
+            "x": 620,
+            "y": 246
+          },
+          {
+            "x": 724,
+            "y": 454
+          },
+          {
+            "x": 880,
+            "y": 298
+          }
+        ],
+        "plates": [
+          {
+            "x": 620,
+            "y": 350
+          },
+          {
+            "x": 724,
+            "y": 350
+          },
+          {
+            "x": 828,
+            "y": 350
+          }
+        ]
       }
     ],
     "terrain": [
@@ -2589,24 +2599,7 @@
     "puzzles": [
       {
         "id": "ruins_dungeon_runes",
-        "type": "switches",
-        "switches": [
-          {
-            "x": 280,
-            "y": 700,
-            "requires": "reveal_walls"
-          },
-          {
-            "x": 1000,
-            "y": 700,
-            "requires": "grow_vines"
-          },
-          {
-            "x": 640,
-            "y": 300,
-            "requires": "reveal_walls"
-          }
-        ],
+        "type": "blocks",
         "gate": {
           "x": 1058,
           "y": 158,
@@ -2621,7 +2614,26 @@
           "lootKind": "armor"
         },
         "hintKey": "puzzle.solved",
-        "ordered": true
+        "blocks": [
+          {
+            "x": 660,
+            "y": 434
+          },
+          {
+            "x": 920,
+            "y": 330
+          }
+        ],
+        "plates": [
+          {
+            "x": 660,
+            "y": 330
+          },
+          {
+            "x": 816,
+            "y": 330
+          }
+        ]
       }
     ],
     "terrain": [

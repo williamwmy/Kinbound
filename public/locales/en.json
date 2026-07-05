@@ -340,5 +340,8 @@
   "quest.reach_ruins.desc": "Explore the ancient ruins.",
   "quest.reach_castle.title": "The Final Castle",
   "quest.reach_castle.desc": "Reach the castle at the journey's end.",
-  "victory.banner": "You saved Kinbound!\nPeace returns to the land."
+  "victory.banner": "You saved Kinbound!\nPeace returns to the land.",
+  "puzzle.watch": "The stones are singing! Watch and listen to the order …",
+  "puzzle.push_hint": "Push the boulders onto the plates to break the seal!",
+  "puzzle.plate_down": "The plate clicks into place!"
 }

@@ -51,6 +51,8 @@ export class WorldScene extends Phaser.Scene implements IWorld {
   private terrainReveals: { key: string; cx: number; cy: number; requires: string; objs: Phaser.GameObjects.Shape[]; revealed: boolean }[] = [];
   // "Ny!"-merker som følger ueide kin rundt i verden.
   private newKinBadges: { enemy: Enemy; obj: Phaser.GameObjects.Text }[] = [];
+  // Mynter/hjerter som fiender dropper - magnetiseres mot spilleren (belønningsløkke).
+  private pickups: { sprite: Phaser.GameObjects.Image; kind: 'coin' | 'heart'; value: number }[] = [];
   // Puslespill i dungeons (spec kap. 26).
   private puzzles: {
     def: PuzzleDef;
@@ -60,7 +62,14 @@ export class WorldScene extends Phaser.Scene implements IWorld {
     gate?: Phaser.Physics.Arcade.Sprite;
     gateCollider?: Phaser.Physics.Arcade.Collider;
     solved: boolean;
+    /** Simon-says: neste tidspunkt demo-sekvensen kan spilles (0 = aldri vist) */
+    nextDemo: number;
+    demoing: boolean;
+    /** blocks-gåter: dyttbare steiner + trykkplater */
+    blockSprites: Phaser.Physics.Arcade.Sprite[];
+    plates: { img: Phaser.GameObjects.Image; x: number; y: number; covered: boolean }[];
   }[] = [];
+  private puzzleDemoAcc = 0;
 
   constructor() {
     super('World');
@@ -75,6 +84,7 @@ export class WorldScene extends Phaser.Scene implements IWorld {
     // ville ellers peke på ødelagte objekter fra forrige sone (krasj/lekkasjer).
     this.interactables = [];
     this.companions = [];
+    this.pickups = [];
     this.terrainBlocks = undefined;
     this.terrainColliders = [];
     this.terrainObjs = [];
@@ -378,17 +388,26 @@ export class WorldScene extends Phaser.Scene implements IWorld {
       const already = solvedIds.includes(pz.id);
       const state: (typeof this.puzzles)[number] = {
         def: pz,
-        active: pz.switches.map(() => already),
+        active: (pz.switches ?? []).map(() => already),
         labels: [],
         switchSprites: [],
         solved: already,
+        nextDemo: 0,
+        demoing: false,
+        blockSprites: [],
+        plates: [],
       };
-      // ordnede puslespill viser hva runen ER (stein/lianer ...) + et rekkefølge-tall
+      if (pz.type === 'blocks') {
+        this.spawnBlocksPuzzle(pz, state, already);
+        this.puzzles.push(state);
+        continue;
+      }
+      // ordnede puslespill viser hva runen ER (stein/lianer ...)
       const swTex = (sw: import('../types').PuzzleSwitch) =>
         pz.ordered && sw.requires && this.textures.exists(`obs_${sw.requires}`) ? `obs_${sw.requires}` : 'rune';
       if (already) {
         // allerede løst: vis lyse runer + avdekket belønning (om uåpnet)
-        for (const sw of pz.switches) this.add.sprite(sw.x, sw.y, swTex(sw)).setDepth(5).setScale(1.1).setTint(0x66ff99);
+        for (const sw of pz.switches ?? []) this.add.sprite(sw.x, sw.y, swTex(sw)).setDepth(5).setScale(1.1).setTint(0x66ff99);
         this.spawnRewardChest(pz);
       } else {
         // forsegling som blokkerer ally-bevegelse til puslespillet er løst
@@ -400,18 +419,14 @@ export class WorldScene extends Phaser.Scene implements IWorld {
         state.gateCollider = this.physics.add.collider(this.allyGroup, gate);
         this.physics.add.collider(this.enemies, gate);
         // bryterne
-        pz.switches.forEach((sw, si) => {
+        (pz.switches ?? []).forEach((sw, si) => {
           const sprite = this.add.sprite(sw.x, sw.y, swTex(sw)).setDepth(5).setScale(pz.ordered ? 1.2 : 1.3);
           this.tweens.add({ targets: sprite, alpha: { from: 0.7, to: 1 }, duration: 1000, yoyo: true, repeat: -1, ease: 'Sine.InOut' });
           state.switchSprites.push(sprite);
           this.interactables.push({ sprite, kind: 'switch', data: { puzzle: this.puzzles.length, sw: si } });
           if (sw.requires) state.labels.push(this.addRequirementLabel(sw.x, sw.y - 30, sw.requires));
-          // rekkefølge-tall for ordnede puslespill (knus/dyrk i riktig rekkefølge)
-          if (pz.ordered) {
-            state.labels.push(
-              this.add.text(sw.x, sw.y, String(si + 1), { fontSize: '20px', color: '#ffe066', fontStyle: 'bold', stroke: '#000000', strokeThickness: 4 }).setOrigin(0.5).setDepth(8),
-            );
-          }
+          // Ordnede gåter er nå Simon-says: steinene «synger» rekkefølgen sin
+          // når du nærmer deg (se checkPuzzleDemo) - ingen fasit-tall.
         });
       }
       this.puzzles.push(state);
@@ -425,28 +440,201 @@ export class WorldScene extends Phaser.Scene implements IWorld {
     this.interactables.push({ sprite, kind: 'chest', data: c });
   }
 
+  /**
+   * Dyttestein-gåte (Zelda/Sokoban-stil): skyv kampesteinene inn på trykk-
+   * platene for å bryte forseglingen. Spilleren dytter ved å gå mot en stein
+   * et lite øyeblikk; steinen glir da ett hakk. Plater lyser når de dekkes.
+   */
+  private spawnBlocksPuzzle(pz: PuzzleDef, state: (typeof this.puzzles)[number], already: boolean): void {
+    const plates = pz.plates ?? [];
+    const blocks = pz.blocks ?? [];
+    if (already) {
+      // løst: plater trykket + steiner plassert på dem (ren kulisse)
+      plates.forEach((p, i) => {
+        this.add.image(p.x, p.y, 'pressure_plate').setDepth(3).setTint(0x66ff99);
+        if (blocks[i]) this.add.image(p.x, p.y, 'push_block').setDepth(6).setScale(1.15);
+      });
+      this.spawnRewardChest(pz);
+      return;
+    }
+    // forsegling (samme som rune-gåtene)
+    const gx = pz.gate.x + pz.gate.w / 2;
+    const gy = pz.gate.y + pz.gate.h / 2;
+    const gate = this.physics.add.staticSprite(gx, gy, 'gate').setDepth(6);
+    gate.setDisplaySize(pz.gate.w, pz.gate.h).refreshBody();
+    state.gate = gate;
+    state.gateCollider = this.physics.add.collider(this.allyGroup, gate);
+    this.physics.add.collider(this.enemies, gate);
+    // trykkplater (under steinene i dybde)
+    for (const p of plates) {
+      const img = this.add.image(p.x, p.y, 'pressure_plate').setDepth(3);
+      this.tweens.add({ targets: img, alpha: { from: 0.75, to: 1 }, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.InOut' });
+      state.plates.push({ img, x: p.x, y: p.y, covered: false });
+    }
+    // dyttbare steiner (statiske kropper; flyttes med tween + refreshBody)
+    const puzzleIdx = this.puzzles.length;
+    for (const b of blocks) {
+      const block = this.physics.add.staticSprite(b.x, b.y, 'push_block').setDepth(7);
+      block.setScale(1.15).refreshBody();
+      state.blockSprites.push(block);
+      this.physics.add.collider(this.enemies, block);
+      this.physics.add.collider(this.player, block, () => this.pushBlock(puzzleIdx, block));
+    }
+  }
+
+  /** Akkumuler dytt mens spilleren går mot steinen; over terskel -> gli ett hakk. */
+  private pushBlock(puzzleIdx: number, block: Phaser.Physics.Arcade.Sprite): void {
+    const pz = this.puzzles[puzzleIdx];
+    if (!pz || pz.solved || block.getData('sliding')) return;
+    // les INTENSJONEN (rå input), ikke fysisk fart - fysikken nuller farten
+    // mot statiske kropper, så velocity er alltid ~0 akkurat når man dytter
+    const input = this.player.getMoveInput();
+    const dx = block.x - this.player.x;
+    const dy = block.y - this.player.y;
+    // dominant akse + krev at spilleren faktisk går MOT steinen
+    let dir: { x: number; y: number };
+    if (Math.abs(dx) > Math.abs(dy)) {
+      if (Math.sign(input.x) !== Math.sign(dx) || Math.abs(input.x) < 0.3) return;
+      dir = { x: Math.sign(dx), y: 0 };
+    } else {
+      if (Math.sign(input.y) !== Math.sign(dy) || Math.abs(input.y) < 0.3) return;
+      dir = { x: 0, y: Math.sign(dy) };
+    }
+    const now = this.time.now;
+    const last = (block.getData('heatAt') as number) ?? 0;
+    const prevDir = block.getData('heatDir') as string | undefined;
+    const key = `${dir.x},${dir.y}`;
+    let heat = (block.getData('heat') as number) ?? 0;
+    if (now - last > 160 || prevDir !== key) heat = 0; // slapp taket / byttet side
+    heat += this.game.loop.delta;
+    block.setData({ heat, heatAt: now, heatDir: key });
+    if (heat < 140) return;
+    block.setData('heat', 0);
+    this.slideBlock(puzzleIdx, block, dir.x, dir.y);
+  }
+
+  private slideBlock(puzzleIdx: number, block: Phaser.Physics.Arcade.Sprite, dx: number, dy: number): void {
+    const STEP = 52;
+    const tx = block.x + dx * STEP;
+    const ty = block.y + dy * STEP;
+    // Innenfor sonen + destinasjon fri (vegger/port/andre steiner er statiske
+    // kropper). 110px-marginen sikrer at spilleren alltid får plass BAK steinen
+    // til å dytte den tilbake - ingen permanente Sokoban-dødlåser.
+    if (tx < 110 || ty < 110 || tx > this.zone.width - 110 || ty > this.zone.height - 110) return;
+    const blocked = this.physics
+      .overlapRect(tx - 18, ty - 18, 36, 36, false, true)
+      .some((b) => b !== block.body);
+    if (blocked || this.enemiesInRadius(tx, ty, 34).length > 0) return;
+    block.setData('sliding', true);
+    EventBus.emit('sfx', 'push');
+    this.tweens.add({
+      targets: block, x: tx, y: ty, duration: 170, ease: 'Sine.Out',
+      onUpdate: () => block.refreshBody(),
+      onComplete: () => {
+        block.refreshBody();
+        block.setData('sliding', false);
+        this.checkPlates(puzzleIdx);
+      },
+    });
+  }
+
+  /** Oppdater plate-dekning; alle dekket -> forseglingen brytes. */
+  private checkPlates(puzzleIdx: number): void {
+    const pz = this.puzzles[puzzleIdx];
+    if (!pz || pz.solved) return;
+    for (const p of pz.plates) {
+      const covered = pz.blockSprites.some((b) => Phaser.Math.Distance.Between(b.x, b.y, p.x, p.y) < 28);
+      if (covered && !p.covered) {
+        p.covered = true;
+        p.img.setTint(0x66ff99);
+        this.floatText(p.x, p.y - 22, t('puzzle.plate_down'), '#7dff9a');
+        EventBus.emit('sfx', 'coin');
+      } else if (!covered && p.covered) {
+        p.covered = false;
+        p.img.clearTint();
+      }
+    }
+    if (pz.plates.length > 0 && pz.plates.every((p) => p.covered)) this.solvePuzzle(puzzleIdx);
+  }
+
+  /**
+   * Simon-says-demo: når spilleren nærmer seg en uløst ordnet gåte, «synger»
+   * steinene sekvensen sin - hver rune pulserer og spiller sin tone i riktig
+   * rekkefølge. Spilleren må se/lytte og gjenta. (Kalles ~2x/sek fra update.)
+   */
+  private checkPuzzleDemo(): void {
+    const now = this.time.now;
+    for (const pz of this.puzzles) {
+      if (pz.solved || pz.demoing || now < pz.nextDemo) continue;
+      // blocks-gåte: ett hint første gang man nærmer seg platene
+      if (pz.def.type === 'blocks') {
+        const p0 = pz.plates[0];
+        if (p0 && pz.nextDemo === 0 && Phaser.Math.Distance.Between(this.player.x, this.player.y, p0.x, p0.y) < 260) {
+          EventBus.emit(Events.Toast, t('puzzle.push_hint'));
+          pz.nextDemo = Number.MAX_SAFE_INTEGER;
+        }
+        continue;
+      }
+      if (!pz.def.ordered) continue;
+      if (pz.active.some(Boolean)) continue; // midt i et forsøk - ikke avbryt
+      const first = pz.def.switches?.[0];
+      if (!first) continue;
+      const d = Phaser.Math.Distance.Between(this.player.x, this.player.y, first.x, first.y);
+      if (d > 240) continue;
+      if (pz.nextDemo === 0) EventBus.emit(Events.Toast, t('puzzle.watch'));
+      this.playRuneSequence(pz);
+    }
+  }
+
+  private playRuneSequence(pz: (typeof this.puzzles)[number]): void {
+    pz.demoing = true;
+    const switches = pz.def.switches ?? [];
+    switches.forEach((_, i) => {
+      this.time.delayedCall(500 + i * 620, () => {
+        const s = pz.switchSprites[i];
+        if (!s || !s.active || pz.solved) return;
+        EventBus.emit('sfx', `rune${i}`);
+        s.setTint(0xffe066).setTintMode(Phaser.TintModes.FILL);
+        this.tweens.add({ targets: s, scale: s.scale * 1.35, duration: 200, yoyo: true, ease: 'Sine.InOut' });
+        this.time.delayedCall(420, () => {
+          if (!s.active) return;
+          s.setTintMode(Phaser.TintModes.MULTIPLY);
+          if (!pz.active[i]) s.clearTint();
+        });
+      });
+    });
+    this.time.delayedCall(500 + switches.length * 620, () => {
+      pz.demoing = false;
+      pz.nextDemo = this.time.now + 9000; // gjenta med pause hvis man blir stående
+    });
+  }
+
   private tryPuzzleSwitch(ref: { puzzle: number; sw: number }, sprite: Phaser.GameObjects.Sprite): void {
     const pz = this.puzzles[ref.puzzle];
     if (!pz || pz.solved || pz.active[ref.sw]) return;
-    const sw = pz.def.switches[ref.sw];
+    const sw = pz.def.switches?.[ref.sw];
+    if (!sw) return;
     if (sw.requires && !ExplorationSystem.hasAbility(this.profile, sw.requires)) {
       EventBus.emit(Events.Toast, t('exploration.need_ability', { ability: t(`ability_explore.${sw.requires}`) }));
       return;
     }
-    // Ordnet puslespill: må knuses/dyrkes i riktig rekkefølge (1,2,3). Feil -> nullstill.
+    // Simon-says: gjenta sekvensen steinene sang. Feil -> buzz, nullstill og syng igjen.
     if (pz.def.ordered) {
       const expected = pz.active.filter(Boolean).length; // neste forventede indeks
       if (ref.sw !== expected) {
         pz.active = pz.active.map(() => false);
         pz.switchSprites.forEach((s) => s.clearTint());
+        // rist på den feile runen + dissonant buzz, så syng fasiten på nytt
+        this.tweens.add({ targets: sprite, x: sprite.x + 4, duration: 45, yoyo: true, repeat: 3 });
         EventBus.emit(Events.Toast, t('puzzle.wrong_order'));
-        EventBus.emit('sfx', 'hit');
+        EventBus.emit('sfx', 'buzz');
+        pz.nextDemo = this.time.now + 900;
         return;
       }
       pz.active[ref.sw] = true;
       sprite.setTint(0x66ff99);
       this.exploreEffect(sprite.x, sprite.y, sw.requires ?? 'charge_runes');
-      EventBus.emit('sfx', 'explore');
+      EventBus.emit('sfx', `rune${ref.sw}`); // spill runens egen tone - du «synger med»
       const litO = pz.active.filter(Boolean).length;
       if (litO < pz.active.length) EventBus.emit(Events.Toast, t('puzzle.activated', { lit: litO, total: pz.active.length }));
       else this.solvePuzzle(ref.puzzle);
@@ -502,33 +690,69 @@ export class WorldScene extends Phaser.Scene implements IWorld {
     const base = atk.getData('damage') as number;
     const element = atk.getData('element') as ElementId | undefined;
     const mult = elementMultiplier(element, target.getElement());
-    const dealt = target.takeDamage(base * mult, element);
     const faction = atk.getData('faction') as string | undefined;
+    // kritisk treff (kun allierte): 15 % sjanse for 1.75x + tydelig feedback
+    const crit = faction !== 'enemy' && Math.random() < 0.15;
+    const dealt = target.takeDamage(base * mult * (crit ? 1.75 : 1), element);
     if (dealt > 0) {
-      // flytende skadetall (rødt på spilleren, hvitt på fiender) - kampfeedback
-      const color = target === this.player ? '#ff7066' : '#ffffff';
-      this.floatText(target.x, target.y - 16, String(dealt), color);
+      // flytende skadetall (rødt på spilleren, gull ved crit) - kampfeedback
+      const color = target === this.player ? '#ff7066' : crit ? '#ffb020' : '#ffffff';
+      this.floatText(target.x, target.y - 16, crit ? `${dealt}!` : String(dealt), color, crit ? 20 : 14);
+      // gnister ved treffpunktet gjør hvert slag lesbart
+      this.impactSparks(target.x, target.y, element ? Data.element(element).color : 0xffffff, crit ? 8 : 4);
       // SLAGKRAFT: kast fienden bakover + lite kameraskjelv på spillerens treff
       if (target instanceof Enemy && !target.isBoss) {
         const ang = Phaser.Math.Angle.Between(atk.x, atk.y, target.x, target.y);
-        const kb = faction === 'player' ? 170 : 130;
+        const kb = faction === 'player' ? (crit ? 240 : 170) : 130;
         target.applyKnockback(Math.cos(ang), Math.sin(ang), kb);
       }
-      if (faction === 'player') this.cameras.main.shake(70, 0.004);
+      if (faction === 'player') {
+        this.cameras.main.shake(crit ? 110 : 70, crit ? 0.007 : 0.004);
+        // hitstop: et knapt merkbart frys som gir slaget tyngde
+        this.hitstop(crit ? 70 : 40);
+      }
     }
-    EventBus.emit('sfx', 'hit', element);
+    EventBus.emit('sfx', crit ? 'crit' : 'hit', element);
     if (hitSet) hitSet.add(target);
     // prosjektiler forsvinner ved første treff
     if (atk.getData('projectile')) atk.destroy();
   }
 
   /** Kort flytende tekst (skadetall o.l.) som stiger og falmer. */
-  private floatText(x: number, y: number, text: string, color: string): void {
+  private floatText(x: number, y: number, text: string, color: string, size = 14): void {
     const t = this.add
-      .text(x, y, text, { fontSize: '14px', color, fontStyle: 'bold', stroke: '#000000', strokeThickness: 2 })
+      .text(x, y, text, { fontSize: `${size}px`, color, fontStyle: 'bold', stroke: '#000000', strokeThickness: 2 })
       .setOrigin(0.5)
       .setDepth(20);
     this.tweens.add({ targets: t, y: y - 18, alpha: 0, duration: 600, onComplete: () => t.destroy() });
+  }
+
+  /** Gnister som spruter fra et treffpunkt (kampfeedback). */
+  private impactSparks(x: number, y: number, color: number, count: number): void {
+    for (let i = 0; i < count; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const s = this.add.circle(x, y, 1.5 + Math.random() * 2, color, 1).setDepth(19);
+      this.tweens.add({
+        targets: s, x: x + Math.cos(a) * (14 + Math.random() * 20), y: y + Math.sin(a) * (14 + Math.random() * 20),
+        alpha: 0, duration: 190 + Math.random() * 120, ease: 'Cubic.Out', onComplete: () => s.destroy(),
+      });
+    }
+  }
+
+  /**
+   * Hitstop: frys fysikken et knapt merkbart øyeblikk så slag får tyngde.
+   * Guardes mot meny-/reise-pause (paused) så vi aldri resumer feilaktig.
+   */
+  private hitstopUntil = 0;
+  private hitstop(ms: number): void {
+    if (this.paused) return;
+    const now = this.time.now;
+    if (now < this.hitstopUntil) return; // ikke stable frys
+    this.hitstopUntil = now + ms;
+    this.physics.pause();
+    this.time.delayedCall(ms, () => {
+      if (!this.paused && this.player.isAlive()) this.physics.resume();
+    });
   }
 
   private setupInput(): void {
@@ -602,12 +826,15 @@ export class WorldScene extends Phaser.Scene implements IWorld {
       const life = Math.min(1200, (req.range / speed) * 1000 + 200);
       this.time.delayedCall(life, () => sprite.active && sprite.destroy());
     } else {
-      // nærkamp: kort levetid, skaler treffsone etter rekkevidde
+      // nærkamp: retningsvendt sveip - starter litt bak slagretningen og
+      // feier gjennom, vokser til full størrelse (leselig + kraftfullt)
       const scale = Math.max(0.6, req.radius / 16);
-      sprite.setScale(scale);
-      sprite.setAlpha(0.6);
+      const ang = Math.atan2(req.dirY, req.dirX);
+      sprite.setRotation(ang - 0.55);
+      sprite.setScale(scale * 0.55);
+      sprite.setAlpha(0.85);
       (sprite.body as Phaser.Physics.Arcade.Body).setAllowGravity(false);
-      this.tweens.add({ targets: sprite, alpha: 0, duration: 160 });
+      this.tweens.add({ targets: sprite, rotation: ang + 0.55, scale, alpha: 0, duration: 160, ease: 'Cubic.Out' });
       this.time.delayedCall(160, () => sprite.active && sprite.destroy());
     }
   }
@@ -1442,9 +1669,14 @@ export class WorldScene extends Phaser.Scene implements IWorld {
 
   // --- fiendedød ----------------------------------------------------------
   private handleEnemyDeath(enemy: Enemy): void {
-    // liten "poff" i elementfarge når fienden beseires (kampfeedback)
-    const poof = this.add.circle(enemy.x, enemy.y, enemy.isBoss ? 26 : 14, Data.element(enemy.def.element).color, 0.5).setDepth(7);
+    // dødseksplosjon i elementfarge: poff + partikkelsprut (kampfeedback)
+    const ecol = Data.element(enemy.def.element).color;
+    const poof = this.add.circle(enemy.x, enemy.y, enemy.isBoss ? 26 : 14, ecol, 0.5).setDepth(7);
     this.tweens.add({ targets: poof, scale: 1.8, alpha: 0, duration: 320, onComplete: () => poof.destroy() });
+    this.impactSparks(enemy.x, enemy.y, ecol, enemy.isBoss ? 16 : 8);
+    this.hitstop(enemy.isBoss ? 120 : 60); // drapet skal kjennes
+    this.cameras.main.shake(enemy.isBoss ? 220 : 90, enemy.isBoss ? 0.01 : 0.005);
+    this.dropPickups(enemy);
     const xp = enemy.def.xpReward * (enemy.isBoss ? 4 : 1);
     for (const c of this.companions) c.gainXp(xp);
     EventBus.emit(Events.Toast, t('combat.xp_gained', { xp }));
@@ -1464,6 +1696,63 @@ export class WorldScene extends Phaser.Scene implements IWorld {
     }
     this.markSpawnDefeated(enemy);
     enemy.destroy();
+  }
+
+  /**
+   * Mynter (og av og til et hjerte) spruter ut av beseirede fiender og
+   * magnetiseres mot spilleren - en konstant, taktil belønningsløkke i kamp.
+   */
+  private dropPickups(enemy: Enemy): void {
+    const coins = enemy.isBoss ? 10 : Math.min(4, 1 + Math.floor(enemy.level / 3));
+    const spawnOne = (kind: 'coin' | 'heart', value: number) => {
+      const sprite = this.add.image(enemy.x, enemy.y, kind).setDepth(9).setScale(kind === 'coin' ? 1.2 : 1);
+      const a = Math.random() * Math.PI * 2;
+      const d = 20 + Math.random() * 42;
+      this.tweens.add({
+        targets: sprite, x: enemy.x + Math.cos(a) * d, y: enemy.y + Math.sin(a) * d,
+        duration: 240, ease: 'Back.Out',
+      });
+      // liten evig "hopp" så de leses som plukkbare
+      this.tweens.add({ targets: sprite, scaleY: sprite.scaleY * 0.85, duration: 380, yoyo: true, repeat: -1, ease: 'Sine.InOut', delay: 260 });
+      this.pickups.push({ sprite, kind, value });
+    };
+    for (let i = 0; i < coins; i++) spawnOne('coin', 1 + Math.floor(enemy.level / 5));
+    // hjerter dropper oftere når spilleren sliter (myk vanskelighetskurve)
+    const heartChance = this.player.healthRatio() < 0.4 ? 0.35 : 0.12;
+    if (!enemy.isBoss && Math.random() < heartChance) spawnOne('heart', 8);
+    if (enemy.isBoss) spawnOne('heart', 16);
+  }
+
+  /** Magnetiser og samle drops nær spilleren (kalles hver frame). */
+  private updatePickups(delta: number): void {
+    if (this.pickups.length === 0) return;
+    const px = this.player.x;
+    const py = this.player.y;
+    const step = (delta / 1000) * 420;
+    this.pickups = this.pickups.filter((p) => {
+      if (!p.sprite.active) return false;
+      const d = Phaser.Math.Distance.Between(p.sprite.x, p.sprite.y, px, py);
+      if (d < 24) {
+        if (p.kind === 'coin') {
+          this.profile.gold += p.value;
+          EventBus.emit(Events.PlayerGoldChanged, this.profile.gold);
+          EventBus.emit('sfx', 'coin');
+        } else {
+          this.player.heal(p.value);
+          this.floatText(px, py - 24, `+${p.value}`, '#7dff9a');
+          EventBus.emit('sfx', 'heart');
+        }
+        p.sprite.destroy();
+        return false;
+      }
+      if (d < 130) {
+        // magnet: akselerer inn mot spilleren
+        const pull = step * (1.4 - d / 130 + 0.4);
+        p.sprite.x += ((px - p.sprite.x) / d) * pull * 3;
+        p.sprite.y += ((py - p.sprite.y) / d) * pull * 3;
+      }
+      return true;
+    });
   }
 
   /** Marker en spawn som beseiret slik at den ikke respawner straks (spec kap. 24). */
@@ -1542,6 +1831,12 @@ export class WorldScene extends Phaser.Scene implements IWorld {
       faceByVelocity(c);
     }
     this.separateCompanions();
+    this.updatePickups(delta);
+    this.puzzleDemoAcc += delta;
+    if (this.puzzleDemoAcc >= 500) {
+      this.puzzleDemoAcc = 0;
+      this.checkPuzzleDemo();
+    }
 
     // dynamisk bossmusikk: bytt tema når en levende boss er i nærheten (spec kap. 5)
     this.musicCheckAcc += delta;
